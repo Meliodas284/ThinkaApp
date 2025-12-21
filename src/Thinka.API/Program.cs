@@ -10,6 +10,8 @@ builder.Host.UseSerilog((context, configuration) =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddDataAccessLayer(builder.Configuration);
 builder.Services.AddApplication();
 builder.Services.AddOptions(builder.Configuration);
