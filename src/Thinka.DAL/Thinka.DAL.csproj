@@ -22,4 +22,8 @@
     <Folder Include="Configurations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Thinka.Domain\Thinka.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

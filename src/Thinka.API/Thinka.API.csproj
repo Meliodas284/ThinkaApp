@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0-preview.5.24306.11" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
@@ -21,6 +22,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Thinka.DAL\Thinka.DAL.csproj" />
+    <ProjectReference Include="..\Thinka.Domain\Thinka.Domain.csproj" />
+    <ProjectReference Include="..\Thinka.Application\Thinka.Application.csproj" />
   </ItemGroup>
 
 </Project>

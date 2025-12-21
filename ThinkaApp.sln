@@ -9,6 +9,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thinka.DAL", "src\Thinka.DAL\Thinka.DAL.csproj", "{EC84EE11-D165-487F-ACD7-18CC818FD575}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thinka.Domain", "src\Thinka.Domain\Thinka.Domain.csproj", "{8186A6DF-B59F-4CE8-87A8-5EB8F63C8580}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Thinka.Application", "src\Thinka.Application\Thinka.Application.csproj", "{EC500D33-A511-4099-B9D1-CB4D81DE9968}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,12 +47,38 @@ Global
 		{EC84EE11-D165-487F-ACD7-18CC818FD575}.Release|x64.Build.0 = Release|Any CPU
 		{EC84EE11-D165-487F-ACD7-18CC818FD575}.Release|x86.ActiveCfg = Release|Any CPU
 		{EC84EE11-D165-487F-ACD7-18CC818FD575}.Release|x86.Build.0 = Release|Any CPU
+		{8186A6DF-B59F-4CE8-87A8-5EB8F63C8580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8186A6DF-B59F-4CE8-87A8-5EB8F63C8580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8186A6DF-B59F-4CE8-87A8-5EB8F63C8580}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8186A6DF-B59F-4CE8-87A8-5EB8F63C8580}.Debug|x64.Build.0 = Debug|Any CPU
+		{8186A6DF-B59F-4CE8-87A8-5EB8F63C8580}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8186A6DF-B59F-4CE8-87A8-5EB8F63C8580}.Debug|x86.Build.0 = Debug|Any CPU
+		{8186A6DF-B59F-4CE8-87A8-5EB8F63C8580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8186A6DF-B59F-4CE8-87A8-5EB8F63C8580}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8186A6DF-B59F-4CE8-87A8-5EB8F63C8580}.Release|x64.ActiveCfg = Release|Any CPU
+		{8186A6DF-B59F-4CE8-87A8-5EB8F63C8580}.Release|x64.Build.0 = Release|Any CPU
+		{8186A6DF-B59F-4CE8-87A8-5EB8F63C8580}.Release|x86.ActiveCfg = Release|Any CPU
+		{8186A6DF-B59F-4CE8-87A8-5EB8F63C8580}.Release|x86.Build.0 = Release|Any CPU
+		{EC500D33-A511-4099-B9D1-CB4D81DE9968}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC500D33-A511-4099-B9D1-CB4D81DE9968}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC500D33-A511-4099-B9D1-CB4D81DE9968}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EC500D33-A511-4099-B9D1-CB4D81DE9968}.Debug|x64.Build.0 = Debug|Any CPU
+		{EC500D33-A511-4099-B9D1-CB4D81DE9968}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EC500D33-A511-4099-B9D1-CB4D81DE9968}.Debug|x86.Build.0 = Debug|Any CPU
+		{EC500D33-A511-4099-B9D1-CB4D81DE9968}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC500D33-A511-4099-B9D1-CB4D81DE9968}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC500D33-A511-4099-B9D1-CB4D81DE9968}.Release|x64.ActiveCfg = Release|Any CPU
+		{EC500D33-A511-4099-B9D1-CB4D81DE9968}.Release|x64.Build.0 = Release|Any CPU
+		{EC500D33-A511-4099-B9D1-CB4D81DE9968}.Release|x86.ActiveCfg = Release|Any CPU
+		{EC500D33-A511-4099-B9D1-CB4D81DE9968}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{EC84EE11-D165-487F-ACD7-18CC818FD575} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{8186A6DF-B59F-4CE8-87A8-5EB8F63C8580} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{EC500D33-A511-4099-B9D1-CB4D81DE9968} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9FCA3E5A-7604-48A9-BF89-DF8153DC4168}

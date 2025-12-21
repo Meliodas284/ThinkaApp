@@ -1,10 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Thinka.Domain.Entities;
 
 namespace Thinka.DAL;
 
 public class ThinkaDbContext : DbContext
 {
+    public DbSet<User> Users { get; set; }
+
     public ThinkaDbContext(DbContextOptions<ThinkaDbContext> options) : base(options)
     {
     }
