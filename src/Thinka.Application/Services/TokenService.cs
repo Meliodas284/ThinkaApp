@@ -29,7 +29,7 @@ public class TokenService : ITokenService
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -59,17 +59,19 @@ public class TokenService : ITokenService
     {
         var tokenValidationParameters = new TokenValidationParameters
         {
-            ValidateAudience = false,
-            ValidateIssuer = false,
+            ValidateAudience = true,
+            ValidateIssuer = true,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key)),
-            ValidateLifetime = false
+            ValidateLifetime = false,
+            ValidAudience = _jwtOptions.Audience,
+            ValidIssuer = _jwtOptions.Issuer
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
         
-        if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha512, StringComparison.InvariantCultureIgnoreCase))
+        if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
             throw new SecurityTokenException("Invalid token");
 
         return principal;

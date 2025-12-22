@@ -4,7 +4,7 @@ public class JwtOptions
 {
     public const string SectionName = "Jwt";
 
-    public required string Issuer { get; init; }
-    public required string Audience { get; init; }
-    public required string Key { get; init; }
+    public string Issuer { get; set; } = string.Empty;
+    public string Audience { get; set; } = string.Empty;
+    public string Key { get; set; } = string.Empty;
 }
