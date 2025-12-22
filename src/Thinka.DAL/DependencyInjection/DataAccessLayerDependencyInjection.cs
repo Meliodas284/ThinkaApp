@@ -18,6 +18,7 @@ public static class DataAccessLayerDependencyInjection
         });
         
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IIdeaRepository, IdeaRepository>();
 
         return services;
     }

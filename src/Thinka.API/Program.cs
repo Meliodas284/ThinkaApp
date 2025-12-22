@@ -10,11 +10,13 @@ builder.Host.UseSerilog((context, configuration) =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddDataAccessLayer(builder.Configuration);
 builder.Services.AddApplication();
 builder.Services.AddOptions(builder.Configuration);
 builder.Services.AddSwagger();
-builder.Services.AddAuth();
+builder.Services.AddAuth(builder.Configuration);
 
 var app = builder.Build();
 
