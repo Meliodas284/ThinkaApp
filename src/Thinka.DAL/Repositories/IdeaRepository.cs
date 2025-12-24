@@ -18,6 +18,13 @@ public class IdeaRepository : IIdeaRepository
         return await _context.Ideas.FindAsync(id);
     }
 
+    public async Task<Idea?> GetByIdWithLikesAsync(Guid id)
+    {
+        return await _context.Ideas
+            .Include(i => i.Likes)
+            .FirstOrDefaultAsync(i => i.Id == id);
+    }
+
     public async Task<List<Idea>> GetByAuthorIdAsync(Guid authorId, int pageNumber, int pageSize)
     {
         return await _context.Ideas

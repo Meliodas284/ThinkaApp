@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace Thinka.Domain.Entities;
 
 public class User
@@ -10,4 +13,6 @@ public class User
     public string RefreshToken { get; set; } = string.Empty;
     public DateTime TokenCreated { get; set; }
     public DateTime TokenExpires { get; set; }
+    
+    public ICollection<Like> Likes { get; set; } = new List<Like>();
 }
