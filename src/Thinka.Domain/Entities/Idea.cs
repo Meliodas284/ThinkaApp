@@ -17,4 +17,6 @@ public class Idea
     public Guid AuthorId { get; set; }
 
     public User Author { get; set; } = null!;
+    
+    public ICollection<Like> Likes { get; set; } = new List<Like>();
 }

@@ -11,10 +11,12 @@ namespace Thinka.API.Controllers;
 public class IdeasController : ControllerBase
 {
     private readonly IIdeaService _ideaService;
+    private readonly ILikeService _likeService;
 
-    public IdeasController(IIdeaService ideaService)
+    public IdeasController(IIdeaService ideaService, ILikeService likeService)
     {
         _ideaService = ideaService;
+        _likeService = likeService;
     }
 
     [HttpPost]
@@ -22,6 +24,20 @@ public class IdeasController : ControllerBase
     {
         var newIdea = await _ideaService.CreateIdeaAsync(createIdeaDto);
         return CreatedAtAction(nameof(GetIdea), new { id = newIdea.Id }, newIdea);
+    }
+    
+    [HttpPost("{id:guid}/like")]
+    public async Task<IActionResult> ToggleLike(Guid id)
+    {
+        try
+        {
+            await _likeService.ToggleLikeAsync(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new { message = e.Message });
+        }
     }
 
     [HttpGet]
