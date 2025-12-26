@@ -14,5 +14,9 @@ public class User
     public DateTime TokenCreated { get; set; }
     public DateTime TokenExpires { get; set; }
     
+    public ICollection<Idea> Ideas { get; set; } = new List<Idea>();
+
     public ICollection<Like> Likes { get; set; } = new List<Like>();
+
+    public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 }
