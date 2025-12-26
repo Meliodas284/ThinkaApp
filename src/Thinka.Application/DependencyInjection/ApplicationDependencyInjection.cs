@@ -12,6 +12,7 @@ public static class ApplicationDependencyInjection
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IIdeaService, IdeaService>();
         services.AddScoped<ILikeService, LikeService>();
+        services.AddScoped<ICommentService, CommentService>();
 
         return services;
     }

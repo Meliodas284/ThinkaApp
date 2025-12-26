@@ -29,7 +29,7 @@ public class IdeaConfiguration : IEntityTypeConfiguration<Idea>
                 v => (Category)Enum.Parse(typeof(Category), v));
 
         builder.HasOne(i => i.Author)
-            .WithMany()
+            .WithMany(u => u.Ideas)
             .HasForeignKey(i => i.AuthorId)
             .OnDelete(DeleteBehavior.Cascade);
     }
