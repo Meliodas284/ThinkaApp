@@ -10,13 +10,11 @@ namespace Thinka.Application.Services;
 public class CommentService : ICommentService
 {
     private readonly ICommentRepository _commentRepository;
-    private readonly IUserRepository _userRepository;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CommentService(ICommentRepository commentRepository, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor)
+    public CommentService(ICommentRepository commentRepository, IHttpContextAccessor httpContextAccessor)
     {
         _commentRepository = commentRepository;
-        _userRepository = userRepository;
         _httpContextAccessor = httpContextAccessor;
     }
 
@@ -48,7 +46,44 @@ public class CommentService : ICommentService
             IdeaId = c.IdeaId
         });
     }
-    
+
+    public async Task UpdateComment(Guid commentId, UpdateCommentDto updateCommentDto)
+    {
+        var userId = GetCurrentUserId();
+        var comment = await _commentRepository.GetByIdAsync(commentId);
+
+        if (comment is null)
+        {
+            throw new Exception("Comment not found");
+        }
+
+        if (comment.AuthorId != userId)
+        {
+            throw new UnauthorizedAccessException("User is not authorized to update this comment.");
+        }
+
+        comment.Content = updateCommentDto.Content;
+        await _commentRepository.UpdateAsync(comment);
+    }
+
+    public async Task DeleteComment(Guid commentId)
+    {
+        var userId = GetCurrentUserId();
+        var comment = await _commentRepository.GetByIdAsync(commentId);
+        
+        if (comment is null)
+        {
+            return;
+        }
+
+        if (comment.AuthorId != userId)
+        {
+            throw new UnauthorizedAccessException("User is not authorized to delete this comment.");
+        }
+
+        await _commentRepository.DeleteAsync(comment);
+    }
+
     private Guid GetCurrentUserId()
     {
         var userIdValue = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);

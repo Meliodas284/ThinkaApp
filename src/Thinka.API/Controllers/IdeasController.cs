@@ -12,11 +12,13 @@ public class IdeasController : ControllerBase
 {
     private readonly IIdeaService _ideaService;
     private readonly ILikeService _likeService;
+    private readonly ICommentService _commentService;
 
-    public IdeasController(IIdeaService ideaService, ILikeService likeService)
+    public IdeasController(IIdeaService ideaService, ILikeService likeService, ICommentService commentService)
     {
         _ideaService = ideaService;
         _likeService = likeService;
+        _commentService = commentService;
     }
 
     [HttpPost]
@@ -41,6 +43,7 @@ public class IdeasController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> GetUserIdeas([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var ideas = await _ideaService.GetUserIdeasAsync(pageNumber, pageSize);
@@ -48,6 +51,7 @@ public class IdeasController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetIdea(Guid id)
     {
         var idea = await _ideaService.GetIdeaByIdAsync(id);
@@ -56,6 +60,14 @@ public class IdeasController : ControllerBase
             return NotFound();
         }
         return Ok(idea);
+    }
+    
+    [HttpGet("{ideaId:guid}/comments")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetComments(Guid ideaId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        var comments = await _commentService.GetComments(ideaId, page, pageSize);
+        return Ok(comments);
     }
 
     [HttpPut("{id:guid}")]

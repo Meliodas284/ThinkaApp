@@ -19,6 +19,11 @@ public class CommentRepository : ICommentRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task<Comment?> GetByIdAsync(Guid commentId)
+    {
+        return await _context.Comments.FindAsync(commentId);
+    }
+
     public async Task<IEnumerable<Comment>> GetAllByIdeaIdAsync(Guid ideaId, int page, int pageSize)
     {
         return await _context.Comments
@@ -28,5 +33,17 @@ public class CommentRepository : ICommentRepository
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
+    }
+
+    public async Task UpdateAsync(Comment comment)
+    {
+        _context.Comments.Update(comment);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(Comment comment)
+    {
+        _context.Comments.Remove(comment);
+        await _context.SaveChangesAsync();
     }
 }

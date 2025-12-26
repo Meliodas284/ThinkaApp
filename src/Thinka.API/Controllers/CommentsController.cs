@@ -24,11 +24,39 @@ public class CommentsController : ControllerBase
         return Ok();
     }
 
-    [HttpGet("/api/ideas/{ideaId}/comments")]
-    [AllowAnonymous]
-    public async Task<IActionResult> GetComments(Guid ideaId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateComment(Guid id, [FromBody] UpdateCommentDto updateCommentDto)
     {
-        var comments = await _commentService.GetComments(ideaId, page, pageSize);
-        return Ok(comments);
+        try
+        {
+            await _commentService.UpdateComment(id, updateCommentDto);
+            return NoContent();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new { message = e.Message });
+        }
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteComment(Guid id)
+    {
+        try
+        {
+            await _commentService.DeleteComment(id);
+            return NoContent();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new { message = e.Message });
+        }
     }
 }
