@@ -13,6 +13,7 @@ public static class ApplicationDependencyInjection
         services.AddScoped<IIdeaService, IdeaService>();
         services.AddScoped<ILikeService, LikeService>();
         services.AddScoped<ICommentService, CommentService>();
+        services.AddScoped<ISaveService, SaveService>();
 
         return services;
     }

@@ -13,12 +13,14 @@ public class IdeasController : ControllerBase
     private readonly IIdeaService _ideaService;
     private readonly ILikeService _likeService;
     private readonly ICommentService _commentService;
+    private readonly ISaveService _saveService;
 
-    public IdeasController(IIdeaService ideaService, ILikeService likeService, ICommentService commentService)
+    public IdeasController(IIdeaService ideaService, ILikeService likeService, ICommentService commentService, ISaveService saveService)
     {
         _ideaService = ideaService;
         _likeService = likeService;
         _commentService = commentService;
+        _saveService = saveService;
     }
 
     [HttpPost]
@@ -40,6 +42,27 @@ public class IdeasController : ControllerBase
         {
             return BadRequest(new { message = e.Message });
         }
+    }
+    
+    [HttpPost("{id:guid}/save")]
+    public async Task<IActionResult> ToggleSave(Guid id)
+    {
+        try
+        {
+            await _saveService.ToggleSaveAsync(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new { message = e.Message });
+        }
+    }
+    
+    [HttpGet("saves")]
+    public async Task<IActionResult> GetSavedIdeas([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    {
+        var ideas = await _saveService.GetSavedIdeasAsync(pageNumber, pageSize);
+        return Ok(ideas);
     }
 
     [HttpGet]
