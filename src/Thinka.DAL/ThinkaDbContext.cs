@@ -10,6 +10,7 @@ public class ThinkaDbContext : DbContext
     public DbSet<Idea> Ideas { get; set; }
     public DbSet<Like> Likes { get; set; }
     public DbSet<Comment> Comments { get; set; }
+    public DbSet<Save> Saves { get; set; }
 
     public ThinkaDbContext(DbContextOptions<ThinkaDbContext> options) : base(options)
     {
