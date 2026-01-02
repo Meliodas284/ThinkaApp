@@ -29,6 +29,11 @@ public class SaveRepository : ISaveRepository
     {
         return await _context.Saves.FirstOrDefaultAsync(s => s.IdeaId.Equals(ideaId) && s.UserId.Equals(userId));
     }
+    
+    public async Task<int> CountSavesByUserIdAsync(Guid userId)
+    {
+        return await _context.Saves.CountAsync(s => s.UserId == userId);
+    }
 
     public async Task<List<Idea>> GetSavedIdeasAsync(Guid userId, int pageNumber, int pageSize)
     {

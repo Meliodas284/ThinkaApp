@@ -44,9 +44,9 @@ public class IdeaService : IIdeaService
         };
     }
 
-    public async Task<List<IdeaDto>> GetUserIdeasAsync(int pageNumber, int pageSize)
+    public async Task<List<IdeaDto>> GetUserIdeasAsync(int pageNumber, int pageSize, Guid? userId = null)
     {
-        var authorId = GetCurrentUserId();
+        var authorId = userId ?? GetCurrentUserId();
         var ideas = await _ideaRepository.GetByAuthorIdAsync(authorId, pageNumber, pageSize);
         return ideas.Select(idea => new IdeaDto
         {

@@ -34,6 +34,11 @@ public class IdeaRepository : IIdeaRepository
             .ToListAsync();
     }
 
+    public async Task<int> CountByAuthorIdAsync(Guid authorId)
+    {
+        return await _context.Ideas.CountAsync(i => i.AuthorId == authorId);
+    }
+
     public async Task AddAsync(Idea idea)
     {
         await _context.Ideas.AddAsync(idea);
