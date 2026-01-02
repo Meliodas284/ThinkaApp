@@ -9,4 +9,6 @@ public interface ILikeRepository
     Task AddAsync(Like like);
     
     Task DeleteAsync(Like like);
+    
+    Task<int> CountLikesByAuthorIdAsync(Guid authorId);
 }

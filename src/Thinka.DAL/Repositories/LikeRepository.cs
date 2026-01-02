@@ -26,4 +26,9 @@ public class LikeRepository : ILikeRepository
         _context.Likes.Remove(like);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<int> CountLikesByAuthorIdAsync(Guid authorId)
+    {
+        return await _context.Likes.CountAsync(l => l.Idea.AuthorId == authorId);
+    }
 }

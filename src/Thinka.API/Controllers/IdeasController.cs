@@ -66,10 +66,17 @@ public class IdeasController : ControllerBase
     }
 
     [HttpGet]
-    [AllowAnonymous]
     public async Task<IActionResult> GetUserIdeas([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
         var ideas = await _ideaService.GetUserIdeasAsync(pageNumber, pageSize);
+        return Ok(ideas);
+    }
+    
+    [HttpGet("user/{userId:guid}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetUserIdeas(Guid userId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    {
+        var ideas = await _ideaService.GetUserIdeasAsync(pageNumber, pageSize, userId);
         return Ok(ideas);
     }
 

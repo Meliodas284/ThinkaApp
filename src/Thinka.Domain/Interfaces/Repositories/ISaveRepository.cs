@@ -8,4 +8,5 @@ public interface ISaveRepository
     Task DeleteAsync(Save save);
     Task<Save?> GetAsync(Guid ideaId, Guid userId);
     Task<List<Idea>> GetSavedIdeasAsync(Guid userId, int pageNumber, int pageSize);
+    Task<int> CountSavesByUserIdAsync(Guid userId);
 }
