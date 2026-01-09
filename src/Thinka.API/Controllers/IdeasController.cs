@@ -33,29 +33,15 @@ public class IdeasController : ControllerBase
     [HttpPost("{id:guid}/like")]
     public async Task<IActionResult> ToggleLike(Guid id)
     {
-        try
-        {
-            await _likeService.ToggleLikeAsync(id);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new { message = e.Message });
-        }
+        await _likeService.ToggleLikeAsync(id);
+        return Ok();
     }
     
     [HttpPost("{id:guid}/save")]
     public async Task<IActionResult> ToggleSave(Guid id)
     {
-        try
-        {
-            await _saveService.ToggleSaveAsync(id);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new { message = e.Message });
-        }
+        await _saveService.ToggleSaveAsync(id);
+        return Ok();
     }
     
     [HttpGet("saves")]
@@ -103,28 +89,14 @@ public class IdeasController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateIdea(Guid id, [FromBody] UpdateIdeaDto updateIdeaDto)
     {
-        try
-        {
-            await _ideaService.UpdateIdeaAsync(id, updateIdeaDto);
-            return NoContent();
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return Forbid();
-        }
+        await _ideaService.UpdateIdeaAsync(id, updateIdeaDto);
+        return NoContent();
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteIdea(Guid id)
     {
-        try
-        {
-            await _ideaService.DeleteIdeaAsync(id);
-            return NoContent();
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return Forbid();
-        }
+        await _ideaService.DeleteIdeaAsync(id);
+        return NoContent();
     }
 }

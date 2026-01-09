@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Thinka.Domain.Dto;
 using Thinka.Domain.Entities;
+using Thinka.Domain.Exceptions;
 using Thinka.Domain.Interfaces.Repositories;
 using Thinka.Domain.Interfaces.Services;
 
@@ -25,7 +26,7 @@ public class SaveService : ISaveService
         var idea = await _ideaRepository.GetByIdAsync(ideaId);
         if (idea is null)
         {
-            throw new Exception("Idea is not found");
+            throw new NotFoundException("Idea is not found");
         }
 
         var userId = GetCurrentUserId();
@@ -68,7 +69,7 @@ public class SaveService : ISaveService
         var userIdValue = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (userIdValue == null || !Guid.TryParse(userIdValue, out var userId))
         {
-            throw new InvalidOperationException("User ID not found or invalid in token.");
+            throw new UnauthorizedException("User ID not found or invalid in token.");
         }
         return userId;
     }

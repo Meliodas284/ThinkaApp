@@ -1,5 +1,6 @@
 using Serilog;
 using Thinka.API.DependencyInjection;
+using Thinka.API.Middlewares;
 using Thinka.Application.DependencyInjection;
 using Thinka.DAL.DependencyInjection;
 
@@ -25,6 +26,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

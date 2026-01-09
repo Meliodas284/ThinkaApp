@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Thinka.Domain.Dto;
+using Thinka.Domain.Exceptions;
 using Thinka.Domain.Interfaces.Repositories;
 using Thinka.Domain.Interfaces.Services;
 
@@ -30,7 +31,7 @@ public class UserService : IUserService
         var user = await _userRepository.GetByIdAsync(finalUserId);
 
         if (user is null)
-            throw new Exception("User not found");
+            throw new NotFoundException("User not found");
 
         var ideasCount = await _ideaRepository.CountByAuthorIdAsync(user.Id);
         var likesCount = await _likeRepository.CountLikesByAuthorIdAsync(user.Id);
@@ -51,7 +52,7 @@ public class UserService : IUserService
         var userIdValue = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (userIdValue == null || !Guid.TryParse(userIdValue, out var userId))
         {
-            throw new InvalidOperationException("User ID not found or invalid in token.");
+            throw new UnauthorizedException("User ID not found or invalid in token.");
         }
         return userId;
     }

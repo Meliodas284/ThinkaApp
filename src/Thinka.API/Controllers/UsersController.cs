@@ -19,28 +19,14 @@ public class UsersController : ControllerBase
     [HttpGet("me")]
     public async Task<IActionResult> GetMyProfile()
     {
-        try
-        {
-            var userProfile = await _userService.GetUserProfileAsync();
-            return Ok(userProfile);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new { message = e.Message });
-        }
+        var userProfile = await _userService.GetUserProfileAsync();
+        return Ok(userProfile);
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetUserProfile(Guid id)
     {
-        try
-        {
-            var userProfile = await _userService.GetUserProfileAsync(id);
-            return Ok(userProfile);
-        }
-        catch (Exception e)
-        {
-            return NotFound(new { message = e.Message });
-        }
+        var userProfile = await _userService.GetUserProfileAsync(id);
+        return Ok(userProfile);
     }
 }
