@@ -27,36 +27,14 @@ public class CommentsController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateComment(Guid id, [FromBody] UpdateCommentDto updateCommentDto)
     {
-        try
-        {
-            await _commentService.UpdateComment(id, updateCommentDto);
-            return NoContent();
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return Forbid();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new { message = e.Message });
-        }
+        await _commentService.UpdateComment(id, updateCommentDto);
+        return NoContent();
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteComment(Guid id)
     {
-        try
-        {
-            await _commentService.DeleteComment(id);
-            return NoContent();
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return Forbid();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new { message = e.Message });
-        }
+        await _commentService.DeleteComment(id);
+        return NoContent();
     }
 }

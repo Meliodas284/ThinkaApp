@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Thinka.Domain.Dto;
 using Thinka.Domain.Entities;
+using Thinka.Domain.Exceptions;
 using Thinka.Domain.Interfaces.Repositories;
 using Thinka.Domain.Interfaces.Services;
 
@@ -66,12 +67,12 @@ public class IdeaService : IIdeaService
 
         if (idea == null)
         {
-            throw new Exception("Idea is not found");
+            throw new NotFoundException("Idea is not found");
         }
 
         if (idea.AuthorId != userId)
         {
-            throw new UnauthorizedAccessException("User is not authorized to update this idea.");
+            throw new ForbiddenException("User is not authorized to update this idea.");
         }
 
         idea.Title = updateIdeaDto.Title;
@@ -94,7 +95,7 @@ public class IdeaService : IIdeaService
 
         if (idea.AuthorId != userId)
         {
-            throw new UnauthorizedAccessException("User is not authorized to delete this idea.");
+            throw new ForbiddenException("User is not authorized to delete this idea.");
         }
 
         await _ideaRepository.DeleteAsync(idea);
@@ -125,7 +126,7 @@ public class IdeaService : IIdeaService
         var userIdValue = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (userIdValue == null || !Guid.TryParse(userIdValue, out var userId))
         {
-            throw new InvalidOperationException("User ID not found or invalid in token.");
+            throw new UnauthorizedException("User ID not found or invalid in token.");
         }
         return userId;
     }

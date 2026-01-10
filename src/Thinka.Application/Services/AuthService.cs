@@ -3,6 +3,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Thinka.Domain.Dto;
 using Thinka.Domain.Entities;
+using Thinka.Domain.Exceptions;
 using Thinka.Domain.Interfaces.Repositories;
 using Thinka.Domain.Interfaces.Services;
 using BC = BCrypt.Net.BCrypt;
@@ -24,7 +25,7 @@ public class AuthService : IAuthService
     {
         if (await _userRepository.IsEmailTakenAsync(userRegisterDto.Email))
         {
-            throw new Exception("Email is already taken.");
+            throw new ConflictException("Email is already taken.");
         }
 
         var user = new User
@@ -47,7 +48,7 @@ public class AuthService : IAuthService
 
         if (user == null || !VerifyPasswordHash(userLoginDto.Password, user.PasswordHash, user.PasswordSalt))
         {
-            throw new Exception("Invalid credentials.");
+            throw new UnauthorizedException("Invalid credentials.");
         }
         
         var refreshToken = _tokenService.CreateRefreshToken();

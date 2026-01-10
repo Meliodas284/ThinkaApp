@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Thinka.Domain.Dto;
 using Thinka.Domain.Entities;
+using Thinka.Domain.Exceptions;
 using Thinka.Domain.Interfaces.Repositories;
 using Thinka.Domain.Interfaces.Services;
 
@@ -54,12 +55,12 @@ public class CommentService : ICommentService
 
         if (comment is null)
         {
-            throw new Exception("Comment not found");
+            throw new NotFoundException("Comment not found");
         }
 
         if (comment.AuthorId != userId)
         {
-            throw new UnauthorizedAccessException("User is not authorized to update this comment.");
+            throw new ForbiddenException("User is not authorized to update this comment.");
         }
 
         comment.Content = updateCommentDto.Content;
@@ -78,7 +79,7 @@ public class CommentService : ICommentService
 
         if (comment.AuthorId != userId)
         {
-            throw new UnauthorizedAccessException("User is not authorized to delete this comment.");
+            throw new ForbiddenException("User is not authorized to delete this comment.");
         }
 
         await _commentRepository.DeleteAsync(comment);
@@ -89,7 +90,7 @@ public class CommentService : ICommentService
         var userIdValue = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (userIdValue == null || !Guid.TryParse(userIdValue, out var userId))
         {
-            throw new InvalidOperationException("User ID not found or invalid in token.");
+            throw new UnauthorizedException("User ID not found or invalid in token.");
         }
         return userId;
     }
