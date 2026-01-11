@@ -1,4 +1,5 @@
 using Thinka.Domain.Enums;
+using NpgsqlTypes;
 
 namespace Thinka.Domain.Entities;
 
@@ -23,4 +24,9 @@ public class Idea
     public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     
     public ICollection<Save> Saves { get; set; } = new List<Save>();
+
+    /// <summary>
+    ///     Вектор для полнотекстового поиска.
+    /// </summary>
+    public NpgsqlTsVector SearchVector { get; private set; } = null!;
 }
