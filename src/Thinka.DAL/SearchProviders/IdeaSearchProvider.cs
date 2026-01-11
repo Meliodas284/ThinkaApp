@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Thinka.Domain.Dto;
 using Thinka.Domain.Entities;
 using Thinka.Domain.Enums;
@@ -25,7 +25,7 @@ public class IdeaSearchProvider : IIdeaSearchProvider
         {
             ideasQuery = ideasQuery.Where(i =>
                 i.SearchVector.Matches(
-                    EF.Functions.ToTsQuery("russian", query.Query)
+                    EF.Functions.WebSearchToTsQuery("russian", query.Query)
                 ));
         }
 
@@ -41,7 +41,7 @@ public class IdeaSearchProvider : IIdeaSearchProvider
         {
             ideasQuery = ideasQuery.OrderByDescending(i =>
                 i.SearchVector.Rank(
-                    EF.Functions.ToTsQuery("russian", query.Query)
+                    EF.Functions.WebSearchToTsQuery("russian", query.Query)
                 ));
         }
 
