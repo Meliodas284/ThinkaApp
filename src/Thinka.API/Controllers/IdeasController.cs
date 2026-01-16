@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Thinka.Domain.Dto;
+using Thinka.Domain.Enums;
 using Thinka.Domain.Interfaces.Services;
 
 namespace Thinka.API.Controllers;
@@ -14,13 +15,20 @@ public class IdeasController : ControllerBase
     private readonly ILikeService _likeService;
     private readonly ICommentService _commentService;
     private readonly ISaveService _saveService;
+    private readonly IIdeasSearchService _ideasSearchService;
 
-    public IdeasController(IIdeaService ideaService, ILikeService likeService, ICommentService commentService, ISaveService saveService)
+    public IdeasController(
+        IIdeaService ideaService, 
+        ILikeService likeService, 
+        ICommentService commentService, 
+        ISaveService saveService, 
+        IIdeasSearchService ideasSearchService)
     {
         _ideaService = ideaService;
         _likeService = likeService;
         _commentService = commentService;
         _saveService = saveService;
+        _ideasSearchService = ideasSearchService;
     }
 
     [HttpPost]
@@ -98,5 +106,25 @@ public class IdeasController : ControllerBase
     {
         await _ideaService.DeleteIdeaAsync(id);
         return NoContent();
+    }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchIdeas(
+    [FromQuery] string query,
+    [FromQuery] Category? category,
+    [FromQuery] Guid? authorId,
+    [FromQuery] int page = 1,
+    [FromQuery] int pageSize = 10)
+    {
+        var result = await _ideasSearchService.SearchAsync(new SearchIdeasQueryDto
+        {
+            Query = query,
+            Category = category,
+            AuthorId = authorId,
+            Page = page,
+            PageSize = pageSize
+        });
+
+        return Ok(result);
     }
 }

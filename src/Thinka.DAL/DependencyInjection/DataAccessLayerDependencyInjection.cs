@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Thinka.Domain.Interfaces.Repositories;
 using Thinka.DAL.Repositories;
+using Thinka.Domain.Interfaces.SearchProviders;
+using Thinka.DAL.SearchProviders;
 
 namespace Thinka.DAL.DependencyInjection;
 
@@ -22,6 +24,8 @@ public static class DataAccessLayerDependencyInjection
         services.AddScoped<ILikeRepository, LikeRepository>();
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<ISaveRepository, SaveRepository>();
+
+        services.AddScoped<IIdeaSearchProvider, IdeaSearchProvider>();
 
         return services;
     }

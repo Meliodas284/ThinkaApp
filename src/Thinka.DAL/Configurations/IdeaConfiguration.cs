@@ -28,9 +28,21 @@ public class IdeaConfiguration : IEntityTypeConfiguration<Idea>
                 v => v.ToString(),
                 v => (Category)Enum.Parse(typeof(Category), v));
 
+        builder.Property(i => i.SearchVector)
+            .HasColumnType("tsvector")
+            .HasComputedColumnSql(
+                "setweight(to_tsvector('russian', \"Title\"), 'A') || " +
+                "setweight(to_tsvector('russian', \"ShortDescription\"), 'B') || " +
+                "setweight(to_tsvector('russian', \"FullDescription\"), 'C')",
+            stored: true
+        );
+
         builder.HasOne(i => i.Author)
             .WithMany(u => u.Ideas)
             .HasForeignKey(i => i.AuthorId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasIndex(i => i.SearchVector)
+            .HasMethod("GIN");
     }
 }
