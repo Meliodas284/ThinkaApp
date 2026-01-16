@@ -39,7 +39,7 @@ public class SaveRepository : ISaveRepository
     {
         return await _context.Saves
             .Where(s => s.UserId == userId)
-            .OrderByDescending(s => s.CreationDate)
+            .OrderByDescending(s => s.CreatedAt)
             .Select(s => s.Idea)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
