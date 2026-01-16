@@ -7,6 +7,7 @@ public interface IIdeaRepository
     Task<Idea?> GetByIdAsync(Guid id);
     Task<Idea?> GetByIdWithLikesAsync(Guid id);
     Task<List<Idea>> GetByAuthorIdAsync(Guid authorId, int pageNumber, int pageSize);
+    Task<List<Idea>> GetFeedAsync(Guid currentUserId, int pageNumber, int pageSize);
     Task<int> CountByAuthorIdAsync(Guid authorId);
     Task AddAsync(Idea idea);
     Task UpdateAsync(Idea idea);
