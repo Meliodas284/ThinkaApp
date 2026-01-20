@@ -1,5 +1,3 @@
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
 using Thinka.Domain.Dto.User;
 using Thinka.Domain.Exceptions;
 using Thinka.Domain.Interfaces.Repositories;
@@ -13,20 +11,20 @@ public class UserService : IUserService
     private readonly IIdeaRepository _ideaRepository;
     private readonly ILikeRepository _likeRepository;
     private readonly ISaveRepository _saveRepository;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ICurrentUserService _currentUserService;
 
-    public UserService(IUserRepository userRepository, IIdeaRepository ideaRepository, ILikeRepository likeRepository, ISaveRepository saveRepository, IHttpContextAccessor httpContextAccessor)
+    public UserService(IUserRepository userRepository, IIdeaRepository ideaRepository, ILikeRepository likeRepository, ISaveRepository saveRepository, ICurrentUserService currentUserService)
     {
         _userRepository = userRepository;
         _ideaRepository = ideaRepository;
         _likeRepository = likeRepository;
         _saveRepository = saveRepository;
-        _httpContextAccessor = httpContextAccessor;
+        _currentUserService = currentUserService;
     }
 
     public async Task<UserProfileDto> GetUserProfileAsync(Guid? userId = null)
     {
-        var finalUserId = userId ?? GetCurrentUserId();
+        var finalUserId = userId ?? _currentUserService.UserId;
         
         var user = await _userRepository.GetByIdAsync(finalUserId);
 
@@ -45,15 +43,5 @@ public class UserService : IUserService
             LikesCount = likesCount,
             SavesCount = savesCount
         };
-    }
-    
-    private Guid GetCurrentUserId()
-    {
-        var userIdValue = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userIdValue == null || !Guid.TryParse(userIdValue, out var userId))
-        {
-            throw new UnauthorizedException("User ID not found or invalid in token.");
-        }
-        return userId;
     }
 }

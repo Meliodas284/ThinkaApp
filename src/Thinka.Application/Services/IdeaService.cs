@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 using Thinka.Domain.Dto.Ideas;
 using Thinka.Domain.Entities;
 using Thinka.Domain.Exceptions;
@@ -11,17 +9,17 @@ namespace Thinka.Application.Services;
 public class IdeaService : IIdeaService
 {
     private readonly IIdeaRepository _ideaRepository;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ICurrentUserService _currentUserService;
 
-    public IdeaService(IIdeaRepository ideaRepository, IHttpContextAccessor httpContextAccessor)
+    public IdeaService(IIdeaRepository ideaRepository, ICurrentUserService currentUserService)
     {
         _ideaRepository = ideaRepository;
-        _httpContextAccessor = httpContextAccessor;
+        _currentUserService = currentUserService;
     }
 
     public async Task<FullIdeaDto> CreateIdeaAsync(CreateIdeaDto createIdeaDto)
     {
-        var authorId = GetCurrentUserId();
+        var authorId = _currentUserService.UserId;
         var idea = new Idea
         {
             Id = Guid.NewGuid(),
@@ -51,7 +49,7 @@ public class IdeaService : IIdeaService
 
     public async Task<List<IdeaDto>> GetUserIdeasAsync(int pageNumber, int pageSize, Guid? userId = null)
     {
-        var authorId = userId ?? GetCurrentUserId();
+        var authorId = userId ?? _currentUserService.UserId;
         var ideas = await _ideaRepository.GetByAuthorIdAsync(authorId, pageNumber, pageSize);
         return ideas.Select(idea => new IdeaDto
         {
@@ -71,7 +69,7 @@ public class IdeaService : IIdeaService
     public async Task UpdateIdeaAsync(Guid ideaId, UpdateIdeaDto updateIdeaDto)
     {
         var idea = await _ideaRepository.GetByIdAsync(ideaId);
-        var userId = GetCurrentUserId();
+        var userId = _currentUserService.UserId;
 
         if (idea == null)
         {
@@ -94,7 +92,7 @@ public class IdeaService : IIdeaService
     public async Task DeleteIdeaAsync(Guid ideaId)
     {
         var idea = await _ideaRepository.GetByIdAsync(ideaId);
-        var userId = GetCurrentUserId();
+        var userId = _currentUserService.UserId;
         
         if (idea == null)
         {
@@ -133,15 +131,5 @@ public class IdeaService : IIdeaService
             LikesCount = idea.Likes.Count,
             CommentsCount = idea.Comments.Count
         };
-    }
-    
-    private Guid GetCurrentUserId()
-    {
-        var userIdValue = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userIdValue == null || !Guid.TryParse(userIdValue, out var userId))
-        {
-            throw new UnauthorizedException("User ID not found or invalid in token.");
-        }
-        return userId;
     }
 }

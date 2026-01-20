@@ -1,5 +1,3 @@
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
 using Thinka.Domain.Dto.Ideas;
 using Thinka.Domain.Entities;
 using Thinka.Domain.Exceptions;
@@ -12,13 +10,13 @@ public class SaveService : ISaveService
 {
     private readonly ISaveRepository _saveRepository;
     private readonly IIdeaRepository _ideaRepository;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ICurrentUserService _currentUserService;
 
-    public SaveService(ISaveRepository saveRepository, IIdeaRepository ideaRepository, IHttpContextAccessor httpContextAccessor)
+    public SaveService(ISaveRepository saveRepository, IIdeaRepository ideaRepository, ICurrentUserService currentUserService)
     {
         _saveRepository = saveRepository;
         _ideaRepository = ideaRepository;
-        _httpContextAccessor = httpContextAccessor;
+        _currentUserService = currentUserService;
     }
 
     public async Task ToggleSaveAsync(Guid ideaId)
@@ -29,7 +27,7 @@ public class SaveService : ISaveService
             throw new NotFoundException("Idea is not found");
         }
 
-        var userId = GetCurrentUserId();
+        var userId = _currentUserService.UserId;
         var save = await _saveRepository.GetAsync(ideaId, userId);
 
         if (save is null)
@@ -50,7 +48,7 @@ public class SaveService : ISaveService
 
     public async Task<List<IdeaDto>> GetSavedIdeasAsync(int pageNumber, int pageSize)
     {
-        var userId = GetCurrentUserId();
+        var userId = _currentUserService.UserId;
         var ideas = await _saveRepository.GetSavedIdeasAsync(userId, pageNumber, pageSize);
         
         return ideas.Select(idea => new IdeaDto
@@ -66,15 +64,5 @@ public class SaveService : ISaveService
             LikesCount = idea.Likes.Count(),
             CommentsCount = idea.Comments.Count()
         }).ToList();
-    }
-
-    private Guid GetCurrentUserId()
-    {
-        var userIdValue = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userIdValue == null || !Guid.TryParse(userIdValue, out var userId))
-        {
-            throw new UnauthorizedException("User ID not found or invalid in token.");
-        }
-        return userId;
     }
 }
