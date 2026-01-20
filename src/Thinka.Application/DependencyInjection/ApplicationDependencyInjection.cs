@@ -16,6 +16,7 @@ public static class ApplicationDependencyInjection
         services.AddScoped<ISaveService, SaveService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IIdeasSearchService, IdeasSearchService>();
+        services.AddScoped<IFeedService, FeedService>();
 
         return services;
     }

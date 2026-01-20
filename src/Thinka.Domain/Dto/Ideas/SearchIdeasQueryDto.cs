@@ -1,16 +1,12 @@
-﻿using Thinka.Domain.Enums;
+using Thinka.Domain.Enums;
 
 namespace Thinka.Domain.Dto.Ideas;
 
-public class SearchIdeasQueryDto
+public class SearchIdeasQueryDto : PaginationQuery
 {
     public string Query { get; init; } = null!;
 
     public Category? Category { get; init; }
 
     public Guid? AuthorId { get; init; }
-
-    public int Page { get; init; } = 1;
-
-    public int PageSize { get; init; } = 10;
 }

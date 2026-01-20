@@ -1,12 +1,16 @@
+using Thinka.Domain.Interfaces.Common;
+
 namespace Thinka.Domain.Entities;
 
-public class Comment
+public class Comment : IAuditable
 {
     public Guid Id { get; set; }
 
     public string Content { get; set; } = null!;
 
-    public DateTime CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
+    
+    public DateTimeOffset UpdatedAt { get; set; }
 
     public Guid AuthorId { get; set; }
 

@@ -34,6 +34,21 @@ public class IdeaRepository : IIdeaRepository
             .ToListAsync();
     }
 
+    public async Task<List<Idea>> GetFeedAsync(Guid currentUserId, int pageNumber, int pageSize)
+    {
+        return await _context.Ideas
+            .AsNoTracking()
+            .Include(i => i.Author)
+            .Include(i => i.Likes)
+            .Include(i => i.Comments)
+            .Where(i => i.AuthorId != currentUserId)
+            .OrderByDescending(i => (i.Likes.Count * 1.5) + (i.Comments.Count * 2))
+            .ThenByDescending(i => i.CreatedAt)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+    }
+
     public async Task<int> CountByAuthorIdAsync(Guid authorId)
     {
         return await _context.Ideas.CountAsync(i => i.AuthorId == authorId);
