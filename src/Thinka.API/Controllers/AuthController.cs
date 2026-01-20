@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Thinka.Domain.Dto;
+using Thinka.Domain.Dto.User;
 using Thinka.Domain.Interfaces.Services;
 
 namespace Thinka.API.Controllers;

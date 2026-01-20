@@ -1,6 +1,6 @@
 ﻿using Thinka.Domain.Enums;
 
-namespace Thinka.Domain.Dto;
+namespace Thinka.Domain.Dto.Ideas;
 
 public class SearchIdeasQueryDto
 {

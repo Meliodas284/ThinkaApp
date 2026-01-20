@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using Thinka.Domain.Dto;
+using Thinka.Domain.Dto.User;
 using Thinka.Domain.Exceptions;
 using Thinka.Domain.Interfaces.Repositories;
 using Thinka.Domain.Interfaces.Services;

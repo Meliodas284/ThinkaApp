@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using Thinka.Domain.Dto;
+using Thinka.Domain.Dto.Ideas;
 using Thinka.Domain.Entities;
 using Thinka.Domain.Exceptions;
 using Thinka.Domain.Interfaces.Repositories;
@@ -19,7 +19,7 @@ public class IdeaService : IIdeaService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<IdeaDto> CreateIdeaAsync(CreateIdeaDto createIdeaDto)
+    public async Task<FullIdeaDto> CreateIdeaAsync(CreateIdeaDto createIdeaDto)
     {
         var authorId = GetCurrentUserId();
         var idea = new Idea
@@ -34,7 +34,7 @@ public class IdeaService : IIdeaService
 
         await _ideaRepository.AddAsync(idea);
 
-        return new IdeaDto
+        return new FullIdeaDto
         {
             Id = idea.Id,
             Title = idea.Title,
@@ -54,8 +54,6 @@ public class IdeaService : IIdeaService
             Id = idea.Id,
             Title = idea.Title,
             ShortDescription = idea.ShortDescription,
-            FullDescription = idea.FullDescription,
-            Category = idea.Category.ToString(),
             AuthorId = idea.AuthorId
         }).ToList();
     }
@@ -101,7 +99,7 @@ public class IdeaService : IIdeaService
         await _ideaRepository.DeleteAsync(idea);
     }
 
-    public async Task<IdeaDto?> GetIdeaByIdAsync(Guid ideaId)
+    public async Task<FullIdeaDto?> GetIdeaByIdAsync(Guid ideaId)
     {
         var idea = await _ideaRepository.GetByIdAsync(ideaId);
 
@@ -110,7 +108,7 @@ public class IdeaService : IIdeaService
             return null;
         }
 
-        return new IdeaDto
+        return new FullIdeaDto
         {
             Id = idea.Id,
             Title = idea.Title,

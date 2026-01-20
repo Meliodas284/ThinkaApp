@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Thinka.Domain.Dto;
+using Thinka.Domain.Dto.Ideas;
 using Thinka.Domain.Entities;
 using Thinka.Domain.Enums;
 using Thinka.Domain.Interfaces.SearchProviders;

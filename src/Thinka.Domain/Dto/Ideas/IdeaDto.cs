@@ -1,6 +1,4 @@
-using Thinka.Domain.Enums;
-
-namespace Thinka.Domain.Dto;
+namespace Thinka.Domain.Dto.Ideas;
 
 public class IdeaDto
 {
@@ -9,10 +7,6 @@ public class IdeaDto
     public string Title { get; set; } = null!;
 
     public string ShortDescription { get; set; } = null!;
-    
-    public string FullDescription { get; set; } = null!;
-
-    public string Category { get; set; } = null!;
 
     public Guid AuthorId { get; set; }
 }

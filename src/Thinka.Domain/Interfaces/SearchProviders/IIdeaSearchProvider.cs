@@ -1,4 +1,4 @@
-﻿using Thinka.Domain.Dto;
+﻿using Thinka.Domain.Dto.Ideas;
 using Thinka.Domain.Entities;
 
 namespace Thinka.Domain.Interfaces.SearchProviders;

@@ -1,4 +1,4 @@
-﻿using Thinka.Domain.Dto;
+﻿using Thinka.Domain.Dto.Ideas;
 using Thinka.Domain.Interfaces.SearchProviders;
 using Thinka.Domain.Interfaces.Services;
 
@@ -24,9 +24,7 @@ public class IdeasSearchService : IIdeasSearchService
                 Id = si.Id,
                 AuthorId = si.AuthorId,
                 Title = si.Title,
-                ShortDescription = si.ShortDescription,
-                FullDescription = si.FullDescription,
-                Category = si.Category.ToString()
+                ShortDescription = si.ShortDescription
             }).ToList(),
 
             TotalCount = totalCount

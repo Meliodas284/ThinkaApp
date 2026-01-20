@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using Thinka.Domain.Dto;
+using Thinka.Domain.Dto.Ideas;
 using Thinka.Domain.Entities;
 using Thinka.Domain.Exceptions;
 using Thinka.Domain.Interfaces.Repositories;
@@ -58,8 +58,6 @@ public class SaveService : ISaveService
             Id = idea.Id,
             Title = idea.Title,
             ShortDescription = idea.ShortDescription,
-            FullDescription = idea.FullDescription,
-            Category = idea.Category.ToString(),
             AuthorId = idea.AuthorId
         }).ToList();
     }
