@@ -1,9 +1,10 @@
 using Thinka.Domain.Enums;
 using NpgsqlTypes;
+using Thinka.Domain.Interfaces.Common;
 
 namespace Thinka.Domain.Entities;
 
-public class Idea
+public class Idea : IAuditable
 {
     public Guid Id { get; set; }
 
@@ -25,8 +26,9 @@ public class Idea
     
     public ICollection<Save> Saves { get; set; } = new List<Save>();
 
-    /// <summary>
-    ///     Вектор для полнотекстового поиска.
-    /// </summary>
+    public DateTimeOffset CreatedAt { get; set; }
+
+    public DateTimeOffset UpdatedAt { get; set; }
+
     public NpgsqlTsVector SearchVector { get; private set; } = null!;
 }

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Thinka.DAL.Interceptors;
 using Thinka.Domain.Interfaces.Repositories;
 using Thinka.DAL.Repositories;
 using Thinka.Domain.Interfaces.SearchProviders;
@@ -14,9 +15,12 @@ public static class DataAccessLayerDependencyInjection
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        services.AddDbContext<ThinkaDbContext>(options =>
+        services.AddSingleton<AuditableEntityInterceptor>();
+        
+        services.AddDbContext<ThinkaDbContext>((sp, options) =>
         {
-            options.UseNpgsql(connectionString);
+            var interceptor = sp.GetRequiredService<AuditableEntityInterceptor>();
+            options.UseNpgsql(connectionString).AddInterceptors(interceptor);
         });
         
         services.AddScoped<IUserRepository, UserRepository>();

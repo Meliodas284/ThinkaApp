@@ -38,7 +38,7 @@ public class SaveService : ISaveService
             {
                 IdeaId = ideaId,
                 UserId = userId,
-                CreationDate = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow
             };
             await _saveRepository.AddAsync(save);
         }
