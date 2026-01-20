@@ -22,9 +22,15 @@ public class IdeasSearchService : IIdeasSearchService
             Ideas = searchIdeas.Select(si => new IdeaDto
             {
                 Id = si.Id,
-                AuthorId = si.AuthorId,
+                Author = new AuthorDto
+                {
+                    Id = si.Author.Id,
+                    Username = si.Author?.UserName ?? string.Empty,
+                },
                 Title = si.Title,
-                ShortDescription = si.ShortDescription
+                ShortDescription = si.ShortDescription,
+                LikesCount = si.Likes.Count(),
+                CommentsCount = si.Comments.Count()
             }).ToList(),
 
             TotalCount = totalCount

@@ -41,7 +41,11 @@ public class IdeaService : IIdeaService
             ShortDescription = idea.ShortDescription,
             FullDescription = idea.FullDescription,
             Category = idea.Category.ToString(),
-            AuthorId = idea.AuthorId
+            Author = new AuthorDto
+            {
+                Id = authorId,
+                Username = string.Empty
+            }
         };
     }
 
@@ -54,7 +58,13 @@ public class IdeaService : IIdeaService
             Id = idea.Id,
             Title = idea.Title,
             ShortDescription = idea.ShortDescription,
-            AuthorId = idea.AuthorId
+            Author = new AuthorDto
+            {
+                Id = idea.Author.Id,
+                Username = idea.Author.UserName ?? string.Empty
+            },
+            LikesCount = idea.Likes.Count,
+            CommentsCount = idea.Comments.Count
         }).ToList();
     }
 
@@ -115,7 +125,13 @@ public class IdeaService : IIdeaService
             ShortDescription = idea.ShortDescription,
             FullDescription = idea.FullDescription,
             Category = idea.Category.ToString(),
-            AuthorId = idea.AuthorId
+            Author = new AuthorDto
+            {
+                Id = idea.Author.Id,
+                Username = idea.Author.UserName ?? string.Empty
+            },
+            LikesCount = idea.Likes.Count,
+            CommentsCount = idea.Comments.Count
         };
     }
     

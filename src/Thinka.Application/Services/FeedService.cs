@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Thinka.Domain.Dto;
+using Thinka.Domain.Dto.Ideas;
 using Thinka.Domain.Exceptions;
 using Thinka.Domain.Interfaces.Repositories;
 using Thinka.Domain.Interfaces.Services;
@@ -18,25 +19,23 @@ public class FeedService : IFeedService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<List<IdeaFeedDto>> GetFeedAsync(PaginationQuery query)
+    public async Task<List<IdeaDto>> GetFeedAsync(PaginationQuery query)
     {
         var currentUserId = GetCurrentUserId();
         var ideas = await _ideaRepository.GetFeedAsync(currentUserId, query.Page, query.PageSize);
 
-        return ideas.Select(idea => new IdeaFeedDto
+        return ideas.Select(idea => new IdeaDto
         {
             Id = idea.Id,
             Title = idea.Title,
             ShortDescription = idea.ShortDescription,
-            Category = idea.Category.ToString(),
             Author = new AuthorDto
             {
                 Id = idea.Author.Id,
-                Username = idea.Author.UserName ?? string.Empty
+                Username = idea.Author?.UserName ?? string.Empty
             },
             LikesCount = idea.Likes.Count,
-            CommentsCount = idea.Comments.Count,
-            CreatedAt = idea.CreatedAt
+            CommentsCount = idea.Comments.Count
         }).ToList();
     }
     

@@ -6,6 +6,9 @@ using Thinka.Domain.Interfaces.Services;
 
 namespace Thinka.API.Controllers;
 
+/// <summary>
+///     Контроллер для работы с идеями.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]

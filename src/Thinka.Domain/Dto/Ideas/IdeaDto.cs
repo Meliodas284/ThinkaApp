@@ -8,5 +8,9 @@ public class IdeaDto
 
     public string ShortDescription { get; set; } = null!;
 
-    public Guid AuthorId { get; set; }
+    public AuthorDto Author { get; set; } = null!;
+
+    public int LikesCount { get; set; }
+
+    public int CommentsCount { get; set; }
 }

@@ -17,7 +17,12 @@ public class IdeaSearchProvider : IIdeaSearchProvider
 
     public async Task<(IEnumerable<Idea> Ideas, int TotalCount)> SearchIdeasAsync(SearchIdeasQueryDto query)
     {
-        var ideasQuery = _context.Ideas.AsNoTracking().AsQueryable();
+        var ideasQuery = _context.Ideas
+            .AsNoTracking()
+            .Include(i => i.Author)
+            .Include(i => i.Likes)
+            .Include(i => i.Comments)
+            .AsQueryable();
 
         var hasSearchQuery = !string.IsNullOrWhiteSpace(query.Query);
 

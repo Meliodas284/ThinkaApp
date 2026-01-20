@@ -58,7 +58,13 @@ public class SaveService : ISaveService
             Id = idea.Id,
             Title = idea.Title,
             ShortDescription = idea.ShortDescription,
-            AuthorId = idea.AuthorId
+            Author = new AuthorDto
+            {
+                Id = idea.AuthorId,
+                Username = idea.Author?.UserName ?? string.Empty
+            },
+            LikesCount = idea.Likes.Count(),
+            CommentsCount = idea.Comments.Count()
         }).ToList();
     }
 
