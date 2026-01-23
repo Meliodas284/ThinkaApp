@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using Thinka.Domain.Enums;
 
-namespace Thinka.Domain.Dto;
+namespace Thinka.Domain.Dto.Ideas;
 
-public class CreateIdeaDto
+public class UpdateIdeaDto
 {
     [Required]
     [MaxLength(100)]

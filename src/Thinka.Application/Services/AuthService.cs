@@ -2,6 +2,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Thinka.Domain.Dto;
+using Thinka.Domain.Dto.User;
 using Thinka.Domain.Entities;
 using Thinka.Domain.Exceptions;
 using Thinka.Domain.Interfaces.Repositories;

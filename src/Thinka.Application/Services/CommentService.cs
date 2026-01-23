@@ -1,6 +1,4 @@
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
-using Thinka.Domain.Dto;
+using Thinka.Domain.Dto.IdeasComments;
 using Thinka.Domain.Entities;
 using Thinka.Domain.Exceptions;
 using Thinka.Domain.Interfaces.Repositories;
@@ -11,17 +9,17 @@ namespace Thinka.Application.Services;
 public class CommentService : ICommentService
 {
     private readonly ICommentRepository _commentRepository;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ICurrentUserService _currentUserService;
 
-    public CommentService(ICommentRepository commentRepository, IHttpContextAccessor httpContextAccessor)
+    public CommentService(ICommentRepository commentRepository, ICurrentUserService currentUserService)
     {
         _commentRepository = commentRepository;
-        _httpContextAccessor = httpContextAccessor;
+        _currentUserService = currentUserService;
     }
 
     public async Task CreateComment(CreateCommentDto createCommentDto)
     {
-        var authorId = GetCurrentUserId();
+        var authorId = _currentUserService.UserId;
         var comment = new Comment
         {
             AuthorId = authorId,
@@ -50,7 +48,7 @@ public class CommentService : ICommentService
 
     public async Task UpdateComment(Guid commentId, UpdateCommentDto updateCommentDto)
     {
-        var userId = GetCurrentUserId();
+        var userId = _currentUserService.UserId;
         var comment = await _commentRepository.GetByIdAsync(commentId);
 
         if (comment is null)
@@ -69,7 +67,7 @@ public class CommentService : ICommentService
 
     public async Task DeleteComment(Guid commentId)
     {
-        var userId = GetCurrentUserId();
+        var userId = _currentUserService.UserId;
         var comment = await _commentRepository.GetByIdAsync(commentId);
         
         if (comment is null)
@@ -84,15 +82,4 @@ public class CommentService : ICommentService
 
         await _commentRepository.DeleteAsync(comment);
     }
-
-    private Guid GetCurrentUserId()
-    {
-        var userIdValue = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userIdValue == null || !Guid.TryParse(userIdValue, out var userId))
-        {
-            throw new UnauthorizedException("User ID not found or invalid in token.");
-        }
-        return userId;
-    }
 }
-

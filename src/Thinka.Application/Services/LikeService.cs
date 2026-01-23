@@ -1,8 +1,3 @@
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Thinka.Domain.Entities;
 using Thinka.Domain.Exceptions;
 using Thinka.Domain.Interfaces.Repositories;
@@ -14,18 +9,18 @@ public class LikeService : ILikeService
 {
     private readonly ILikeRepository _likeRepository;
     private readonly IIdeaRepository _ideaRepository;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ICurrentUserService _currentUserService;
 
-    public LikeService(ILikeRepository likeRepository, IIdeaRepository ideaRepository, IHttpContextAccessor httpContextAccessor)
+    public LikeService(ILikeRepository likeRepository, IIdeaRepository ideaRepository, ICurrentUserService currentUserService)
     {
         _likeRepository = likeRepository;
         _ideaRepository = ideaRepository;
-        _httpContextAccessor = httpContextAccessor;
+        _currentUserService = currentUserService;
     }
 
     public async Task ToggleLikeAsync(Guid ideaId)
     {
-        var userId = GetCurrentUserId();
+        var userId = _currentUserService.UserId;
         
         var idea = await _ideaRepository.GetByIdWithLikesAsync(ideaId);
         if (idea is null)
@@ -49,15 +44,5 @@ public class LikeService : ILikeService
         {
             await _likeRepository.DeleteAsync(existingLike);
         }
-    }
-    
-    private Guid GetCurrentUserId()
-    {
-        var userIdValue = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userIdValue == null || !Guid.TryParse(userIdValue, out var userId))
-        {
-            throw new UnauthorizedException("User ID not found or invalid in token.");
-        }
-        return userId;
     }
 }

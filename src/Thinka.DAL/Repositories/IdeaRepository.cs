@@ -15,7 +15,11 @@ public class IdeaRepository : IIdeaRepository
 
     public async Task<Idea?> GetByIdAsync(Guid id)
     {
-        return await _context.Ideas.FindAsync(id);
+        return await _context.Ideas
+            .Include(i => i.Author)
+            .Include(i => i.Likes)
+            .Include(i => i.Comments)
+            .FirstOrDefaultAsync(i => i.Id == id);
     }
 
     public async Task<Idea?> GetByIdWithLikesAsync(Guid id)
@@ -28,6 +32,10 @@ public class IdeaRepository : IIdeaRepository
     public async Task<List<Idea>> GetByAuthorIdAsync(Guid authorId, int pageNumber, int pageSize)
     {
         return await _context.Ideas
+            .AsNoTracking()
+            .Include(i => i.Author)
+            .Include(i => i.Likes)
+            .Include(i => i.Comments)
             .Where(i => i.AuthorId == authorId)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)

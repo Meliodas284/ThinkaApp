@@ -1,6 +1,6 @@
 using Thinka.Domain.Entities;
 
-namespace Thinka.Domain.Dto;
+namespace Thinka.Domain.Dto.User;
 
 public class UserProfileDto
 {

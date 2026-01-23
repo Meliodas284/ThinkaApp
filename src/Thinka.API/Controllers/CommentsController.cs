@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Thinka.Domain.Dto;
+using Thinka.Domain.Dto.IdeasComments;
 using Thinka.Domain.Interfaces.Services;
 
 namespace Thinka.API.Controllers;

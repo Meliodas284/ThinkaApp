@@ -1,4 +1,4 @@
-﻿using Thinka.Domain.Dto;
+﻿using Thinka.Domain.Dto.Ideas;
 using Thinka.Domain.Interfaces.SearchProviders;
 using Thinka.Domain.Interfaces.Services;
 
@@ -22,11 +22,15 @@ public class IdeasSearchService : IIdeasSearchService
             Ideas = searchIdeas.Select(si => new IdeaDto
             {
                 Id = si.Id,
-                AuthorId = si.AuthorId,
+                Author = new AuthorDto
+                {
+                    Id = si.Author.Id,
+                    Username = si.Author?.UserName ?? string.Empty,
+                },
                 Title = si.Title,
                 ShortDescription = si.ShortDescription,
-                FullDescription = si.FullDescription,
-                Category = si.Category.ToString()
+                LikesCount = si.Likes.Count(),
+                CommentsCount = si.Comments.Count()
             }).ToList(),
 
             TotalCount = totalCount

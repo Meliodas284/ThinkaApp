@@ -1,4 +1,4 @@
-using Thinka.Domain.Dto;
+using Thinka.Domain.Dto.User;
 
 namespace Thinka.Domain.Interfaces.Services;
 

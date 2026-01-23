@@ -1,4 +1,4 @@
-namespace Thinka.Domain.Dto;
+namespace Thinka.Domain.Dto.IdeasComments;
 
 public class CreateCommentDto
 {

@@ -38,9 +38,13 @@ public class SaveRepository : ISaveRepository
     public async Task<List<Idea>> GetSavedIdeasAsync(Guid userId, int pageNumber, int pageSize)
     {
         return await _context.Saves
+            .AsNoTracking()
             .Where(s => s.UserId == userId)
             .OrderByDescending(s => s.CreatedAt)
             .Select(s => s.Idea)
+            .Include(i => i.Author)
+            .Include(i => i.Likes)
+            .Include(i => i.Comments)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
