@@ -28,6 +28,9 @@ public static class DataAccessLayerDependencyInjection
         services.AddScoped<ILikeRepository, LikeRepository>();
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<ISaveRepository, SaveRepository>();
+        services.AddScoped<IConversationRepository, ConversationRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IIdeaSearchProvider, IdeaSearchProvider>();
 
