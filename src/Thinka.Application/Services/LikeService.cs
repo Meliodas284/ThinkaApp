@@ -44,6 +44,7 @@ public class LikeService : ILikeService
                 UserId = userId,
                 IdeaId = ideaId
             };
+
             await _likeRepository.AddAsync(newLike);
         }
         else

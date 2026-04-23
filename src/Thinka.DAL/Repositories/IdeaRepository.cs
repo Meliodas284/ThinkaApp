@@ -25,6 +25,7 @@ public class IdeaRepository : IIdeaRepository
     public async Task<Idea?> GetByIdWithLikesAsync(Guid id)
     {
         return await _context.Ideas
+            .AsNoTracking()
             .Include(i => i.Likes)
             .FirstOrDefaultAsync(i => i.Id == id);
     }

@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Thinka.Domain.Entities;
 using Thinka.Domain.Interfaces.Repositories;

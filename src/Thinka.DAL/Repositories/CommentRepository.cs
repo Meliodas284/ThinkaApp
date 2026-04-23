@@ -26,6 +26,7 @@ public class CommentRepository : ICommentRepository
     public async Task<IEnumerable<Comment>> GetAllByIdeaIdAsync(Guid ideaId, int page, int pageSize)
     {
         return await _context.Comments
+            .AsNoTracking()
             .Include(c => c.Author)
             .Where(c => c.IdeaId == ideaId)
             .OrderByDescending(c => c.CreatedAt)
