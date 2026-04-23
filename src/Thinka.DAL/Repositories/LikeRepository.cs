@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Thinka.Domain.Entities;
 using Thinka.Domain.Interfaces.Repositories;
@@ -18,13 +16,12 @@ public class LikeRepository : ILikeRepository
     public async Task AddAsync(Like like)
     {
         await _context.Likes.AddAsync(like);
-        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(Like like)
     {
         _context.Likes.Remove(like);
-        await _context.SaveChangesAsync();
+        await Task.CompletedTask;
     }
 
     public async Task<int> CountLikesByAuthorIdAsync(Guid authorId)

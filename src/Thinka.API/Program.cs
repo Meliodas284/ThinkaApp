@@ -1,5 +1,6 @@
 using Serilog;
 using Thinka.API.DependencyInjection;
+using Thinka.API.Hubs;
 using Thinka.API.Middlewares;
 using Thinka.Application.DependencyInjection;
 using Thinka.DAL.DependencyInjection;
@@ -18,6 +19,7 @@ builder.Services.AddApplication();
 builder.Services.AddOptions(builder.Configuration);
 builder.Services.AddSwagger();
 builder.Services.AddAuth(builder.Configuration);
+builder.Services.AddChat();
 
 var app = builder.Build();
 
@@ -35,5 +37,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();

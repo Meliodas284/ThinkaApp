@@ -25,6 +25,7 @@ public class IdeaRepository : IIdeaRepository
     public async Task<Idea?> GetByIdWithLikesAsync(Guid id)
     {
         return await _context.Ideas
+            .AsNoTracking()
             .Include(i => i.Likes)
             .FirstOrDefaultAsync(i => i.Id == id);
     }
@@ -65,18 +66,17 @@ public class IdeaRepository : IIdeaRepository
     public async Task AddAsync(Idea idea)
     {
         await _context.Ideas.AddAsync(idea);
-        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(Idea idea)
     {
         _context.Ideas.Update(idea);
-        await _context.SaveChangesAsync();
+        await Task.CompletedTask;
     }
 
     public async Task DeleteAsync(Idea idea)
     {
         _context.Ideas.Remove(idea);
-        await _context.SaveChangesAsync();
+        await Task.CompletedTask;
     }
 }

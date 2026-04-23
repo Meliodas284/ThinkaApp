@@ -16,13 +16,12 @@ public class SaveRepository : ISaveRepository
     public async Task AddAsync(Save save)
     {
         await _context.Saves.AddAsync(save);
-        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(Save save)
     {
         _context.Saves.Remove(save);
-        await _context.SaveChangesAsync();
+        await Task.CompletedTask;
     }
 
     public async Task<Save?> GetAsync(Guid ideaId, Guid userId)

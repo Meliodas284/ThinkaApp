@@ -18,6 +18,8 @@ public static class ApplicationDependencyInjection
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IIdeasSearchService, IdeasSearchService>();
         services.AddScoped<IFeedService, FeedService>();
+        services.AddScoped<IConversationService, ConversationService>();
+        services.AddScoped<IMessageService, MessageService>();
 
         return services;
     }
