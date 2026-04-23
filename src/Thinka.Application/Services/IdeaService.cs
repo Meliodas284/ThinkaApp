@@ -9,12 +9,17 @@ namespace Thinka.Application.Services;
 public class IdeaService : IIdeaService
 {
     private readonly IIdeaRepository _ideaRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
 
-    public IdeaService(IIdeaRepository ideaRepository, ICurrentUserService currentUserService)
+    public IdeaService(
+        IIdeaRepository ideaRepository, 
+        ICurrentUserService currentUserService, 
+        IUnitOfWork unitOfWork)
     {
         _ideaRepository = ideaRepository;
         _currentUserService = currentUserService;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<FullIdeaDto> CreateIdeaAsync(CreateIdeaDto createIdeaDto)
@@ -31,6 +36,7 @@ public class IdeaService : IIdeaService
         };
 
         await _ideaRepository.AddAsync(idea);
+        await _unitOfWork.SaveChangesAsync();
 
         return new FullIdeaDto
         {
@@ -87,6 +93,7 @@ public class IdeaService : IIdeaService
         idea.Category = updateIdeaDto.Category;
 
         await _ideaRepository.UpdateAsync(idea);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task DeleteIdeaAsync(Guid ideaId)
@@ -105,6 +112,7 @@ public class IdeaService : IIdeaService
         }
 
         await _ideaRepository.DeleteAsync(idea);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task<FullIdeaDto?> GetIdeaByIdAsync(Guid ideaId)

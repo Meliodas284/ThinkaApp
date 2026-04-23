@@ -9,12 +9,17 @@ namespace Thinka.Application.Services;
 public class CommentService : ICommentService
 {
     private readonly ICommentRepository _commentRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
 
-    public CommentService(ICommentRepository commentRepository, ICurrentUserService currentUserService)
+    public CommentService(
+        ICommentRepository commentRepository, 
+        ICurrentUserService currentUserService, 
+        IUnitOfWork unitOfWork)
     {
         _commentRepository = commentRepository;
         _currentUserService = currentUserService;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task CreateComment(CreateCommentDto createCommentDto)
@@ -29,6 +34,7 @@ public class CommentService : ICommentService
         };
 
         await _commentRepository.AddAsync(comment);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<CommentDto>> GetComments(Guid ideaId, int page, int pageSize)
@@ -63,6 +69,7 @@ public class CommentService : ICommentService
 
         comment.Content = updateCommentDto.Content;
         await _commentRepository.UpdateAsync(comment);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task DeleteComment(Guid commentId)
@@ -81,5 +88,6 @@ public class CommentService : ICommentService
         }
 
         await _commentRepository.DeleteAsync(comment);
+        await _unitOfWork.SaveChangesAsync();
     }
 }

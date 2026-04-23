@@ -9,13 +9,19 @@ public class LikeService : ILikeService
 {
     private readonly ILikeRepository _likeRepository;
     private readonly IIdeaRepository _ideaRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
 
-    public LikeService(ILikeRepository likeRepository, IIdeaRepository ideaRepository, ICurrentUserService currentUserService)
+    public LikeService(
+        ILikeRepository likeRepository, 
+        IIdeaRepository ideaRepository, 
+        ICurrentUserService currentUserService, 
+        IUnitOfWork unitOfWork)
     {
         _likeRepository = likeRepository;
         _ideaRepository = ideaRepository;
         _currentUserService = currentUserService;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task ToggleLikeAsync(Guid ideaId)
@@ -44,5 +50,7 @@ public class LikeService : ILikeService
         {
             await _likeRepository.DeleteAsync(existingLike);
         }
+
+        await _unitOfWork.SaveChangesAsync();
     }
 }

@@ -14,12 +14,17 @@ namespace Thinka.Application.Services;
 public class AuthService : IAuthService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenService _tokenService;
 
-    public AuthService(IUserRepository userRepository, ITokenService tokenService)
+    public AuthService(
+        IUserRepository userRepository, 
+        ITokenService tokenService, 
+        IUnitOfWork unitOfWork)
     {
         _userRepository = userRepository;
         _tokenService = tokenService;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task RegisterAsync(UserRegisterDto userRegisterDto)
@@ -41,6 +46,7 @@ public class AuthService : IAuthService
         _tokenService.UpdateUserRefreshToken(user, refreshToken);
 
         await _userRepository.AddAsync(user);
+        await _unitOfWork.SaveChangesAsync();
     }
     
     public async Task<TokenDto> LoginAsync(UserLoginDto userLoginDto)
@@ -56,6 +62,7 @@ public class AuthService : IAuthService
         _tokenService.UpdateUserRefreshToken(user, refreshToken);
 
         await _userRepository.UpdateAsync(user);
+        await _unitOfWork.SaveChangesAsync();
 
         return new TokenDto
         {
@@ -81,6 +88,7 @@ public class AuthService : IAuthService
         
         _tokenService.UpdateUserRefreshToken(user, newRefreshToken);
         await _userRepository.UpdateAsync(user);
+        await _unitOfWork.SaveChangesAsync();
         
         return new TokenDto
         {

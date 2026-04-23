@@ -10,13 +10,19 @@ public class SaveService : ISaveService
 {
     private readonly ISaveRepository _saveRepository;
     private readonly IIdeaRepository _ideaRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
 
-    public SaveService(ISaveRepository saveRepository, IIdeaRepository ideaRepository, ICurrentUserService currentUserService)
+    public SaveService(
+        ISaveRepository saveRepository, 
+        IIdeaRepository ideaRepository, 
+        ICurrentUserService currentUserService, 
+        IUnitOfWork unitOfWork)
     {
         _saveRepository = saveRepository;
         _ideaRepository = ideaRepository;
         _currentUserService = currentUserService;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task ToggleSaveAsync(Guid ideaId)
@@ -44,6 +50,8 @@ public class SaveService : ISaveService
         {
             await _saveRepository.DeleteAsync(save);
         }
+
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task<List<IdeaDto>> GetSavedIdeasAsync(int pageNumber, int pageSize)

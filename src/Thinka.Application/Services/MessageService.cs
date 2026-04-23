@@ -14,22 +14,19 @@ public class MessageService : IMessageService
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IChatHubService _chatHubService;
-    private readonly ICurrentUserService _currentUserService;
 
     public MessageService(
         IMessageRepository messageRepository,
         IConversationRepository conversationRepository,
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
-        IChatHubService chatHubService, 
-        ICurrentUserService currentUserService)
+        IChatHubService chatHubService)
     {
         _messageRepository = messageRepository;
         _conversationRepository = conversationRepository;
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
         _chatHubService = chatHubService;
-        _currentUserService = currentUserService;
     }
 
     public async Task<List<MessageDto>> GetMessages(Guid userId, Guid conversationId, PaginationQuery pagination)
