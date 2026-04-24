@@ -15,6 +15,7 @@ public static class ApplicationDependencyInjection
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<ISaveService, SaveService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IFollowService, FollowService>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IIdeasSearchService, IdeasSearchService>();
         services.AddScoped<IFeedService, FeedService>();

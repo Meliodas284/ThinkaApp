@@ -30,6 +30,10 @@ public class User : IAuditable
 
     public ICollection<Save> Saves { get; set; } = new List<Save>();
 
+    public ICollection<Follow> Following { get; set; } = new List<Follow>();
+
+    public ICollection<Follow> Followers { get; set; } = new List<Follow>();
+
     public DateTimeOffset CreatedAt { get; set; }
 
     public DateTimeOffset UpdatedAt { get; set; }
