@@ -1,5 +1,3 @@
-using Thinka.Domain.Entities;
-
 namespace Thinka.Domain.Dto.User;
 
 public class UserProfileDto
@@ -13,4 +11,8 @@ public class UserProfileDto
     public int LikesCount { get; set; }
 
     public int SavesCount { get; set; }
+
+    public int FollowersCount { get; set; }
+
+    public int FollowingCount { get; set; }
 }

@@ -29,7 +29,7 @@ public class FeedService : IFeedService
             Author = new AuthorDto
             {
                 Id = idea.Author.Id,
-                Username = idea.Author?.UserName ?? string.Empty
+                Username = idea.Author.UserName
             },
             LikesCount = idea.Likes.Count,
             CommentsCount = idea.Comments.Count
