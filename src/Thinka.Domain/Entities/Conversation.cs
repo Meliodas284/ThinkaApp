@@ -24,6 +24,7 @@ public class Conversation : IAuditable
 
         return new Conversation
         {
+            Id = Guid.NewGuid(),
             User1Id = user1Id,
             User2Id = user2Id
         };

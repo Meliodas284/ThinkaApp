@@ -20,7 +20,8 @@ public class CommentRepository : ICommentRepository
 
     public async Task<Comment?> GetByIdAsync(Guid commentId)
     {
-        return await _context.Comments.FindAsync(commentId);
+        return await _context.Comments
+            .FirstOrDefaultAsync(c => c.Id == commentId);
     }
 
     public async Task<IEnumerable<Comment>> GetAllByIdeaIdAsync(Guid ideaId, int page, int pageSize)

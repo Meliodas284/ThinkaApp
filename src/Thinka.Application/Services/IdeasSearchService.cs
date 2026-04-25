@@ -1,4 +1,5 @@
-﻿using Thinka.Domain.Dto.Ideas;
+using Thinka.Application.Common;
+using Thinka.Domain.Dto.Ideas;
 using Thinka.Domain.Interfaces.SearchProviders;
 using Thinka.Domain.Interfaces.Services;
 
@@ -15,7 +16,16 @@ public class IdeasSearchService : IIdeasSearchService
 
     public async Task<IdeasSearchResultDto> SearchAsync(SearchIdeasQueryDto query)
     {
-        var (searchIdeas, totalCount) = await _ideaSearchProvider.SearchIdeasAsync(query);
+        var sanitizedQuery = new SearchIdeasQueryDto
+        {
+            Query = query.Query?.Trim() ?? string.Empty,
+            Category = query.Category,
+            AuthorId = query.AuthorId,
+            Page = query.GetNormalizedPage(),
+            PageSize = query.GetNormalizedPageSize()
+        };
+
+        var (searchIdeas, totalCount) = await _ideaSearchProvider.SearchIdeasAsync(sanitizedQuery);
 
         return new IdeasSearchResultDto
         {

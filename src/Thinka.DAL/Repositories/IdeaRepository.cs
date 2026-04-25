@@ -22,12 +22,11 @@ public class IdeaRepository : IIdeaRepository
             .FirstOrDefaultAsync(i => i.Id == id);
     }
 
-    public async Task<Idea?> GetByIdWithLikesAsync(Guid id)
+    public async Task<bool> ExistsAsync(Guid id)
     {
         return await _context.Ideas
             .AsNoTracking()
-            .Include(i => i.Likes)
-            .FirstOrDefaultAsync(i => i.Id == id);
+            .AnyAsync(i => i.Id == id);
     }
 
     public async Task<List<Idea>> GetByAuthorIdAsync(Guid authorId, int pageNumber, int pageSize)
@@ -38,12 +37,12 @@ public class IdeaRepository : IIdeaRepository
             .Include(i => i.Likes)
             .Include(i => i.Comments)
             .Where(i => i.AuthorId == authorId)
+            .OrderByDescending(i => i.CreatedAt)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
     }
 
-    // TODO: ѕодумать над нормальной реализацией ленты идей, сейчас все будет работать не производительно
     public async Task<List<Idea>> GetFeedAsync(Guid currentUserId, int pageNumber, int pageSize)
     {
         var followingAuthorIdsQuery = _context.Follows
@@ -114,3 +113,4 @@ public class IdeaRepository : IIdeaRepository
         await Task.CompletedTask;
     }
 }
+

@@ -27,14 +27,13 @@ public class LikeService : ILikeService
     public async Task ToggleLikeAsync(Guid ideaId)
     {
         var userId = _currentUserService.UserId;
-        
-        var idea = await _ideaRepository.GetByIdWithLikesAsync(ideaId);
-        if (idea is null)
+
+        if (!await _ideaRepository.ExistsAsync(ideaId))
         {
             throw new NotFoundException("Idea not found");
         }
 
-        var existingLike = idea.Likes.FirstOrDefault(l => l.UserId == userId);
+        var existingLike = await _likeRepository.GetByIdeaAndUserAsync(ideaId, userId);
 
         if (existingLike is null)
         {

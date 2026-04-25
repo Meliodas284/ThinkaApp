@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Thinka.Domain.Options;
@@ -11,6 +11,11 @@ public static class AuthDependencyInjection
     {
         var jwtOptions = new JwtOptions();
         configuration.GetSection(JwtOptions.SectionName).Bind(jwtOptions);
+
+        if (string.IsNullOrWhiteSpace(jwtOptions.Key))
+        {
+            throw new InvalidOperationException("JWT signing key is not configured.");
+        }
         
         services.AddAuthentication(options =>
         {
@@ -25,6 +30,7 @@ public static class AuthDependencyInjection
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
+                ClockSkew = TimeSpan.Zero,
                 ValidIssuer = jwtOptions.Issuer,
                 ValidAudience = jwtOptions.Audience,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key))
@@ -54,3 +60,4 @@ public static class AuthDependencyInjection
         return services;
     }
 }
+

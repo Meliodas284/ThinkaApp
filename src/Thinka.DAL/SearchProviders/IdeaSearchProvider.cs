@@ -42,15 +42,15 @@ public class IdeaSearchProvider : IIdeaSearchProvider
 
         var totalCount = await ideasQuery.CountAsync();
 
-        if (hasSearchQuery)
-        {
-            ideasQuery = ideasQuery.OrderByDescending(i =>
-                i.SearchVector.Rank(
+        var orderedIdeasQuery = hasSearchQuery
+            ? ideasQuery
+                .OrderByDescending(i => i.SearchVector.Rank(
                     EF.Functions.WebSearchToTsQuery("russian", query.Query)
-                ));
-        }
+                ))
+                .ThenByDescending(i => i.CreatedAt)
+            : ideasQuery.OrderByDescending(i => i.CreatedAt);
 
-        var pagedIdeas = await ideasQuery
+        var pagedIdeas = await orderedIdeasQuery
             .Skip((query.Page - 1) * query.PageSize)
             .Take(query.PageSize)
             .ToListAsync();

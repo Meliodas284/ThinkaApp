@@ -15,12 +15,15 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetByIdAsync(Guid userId)
     {
-        return await _context.Users.FindAsync(userId);
+        return await _context.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == userId);
     }
 
     public async Task<User?> GetByEmailAsync(string email)
     {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        return await _context.Users
+            .FirstOrDefaultAsync(u => u.Email.ToLower() == email);
     }
 
     public async Task AddAsync(User user)
@@ -36,6 +39,8 @@ public class UserRepository : IUserRepository
     
     public async Task<bool> IsEmailTakenAsync(string email)
     {
-        return await _context.Users.AnyAsync(u => u.Email == email);
+        return await _context.Users
+            .AsNoTracking()
+            .AnyAsync(u => u.Email.ToLower() == email);
     }
 }

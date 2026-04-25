@@ -1,3 +1,4 @@
+using Thinka.Application.Common;
 using Thinka.Domain.Dto;
 using Thinka.Domain.Dto.Chat;
 using Thinka.Domain.Entities;
@@ -35,7 +36,13 @@ public class MessageService : IMessageService
         if (conversation is null || !conversation.HasParticipant(userId))
             throw new ForbiddenException("You do not have access to this conversation.");
 
-        var messages = await _messageRepository.GetByConversation(conversationId, pagination);
+        var normalizedPagination = new PaginationQuery
+        {
+            Page = pagination.GetNormalizedPage(),
+            PageSize = pagination.GetNormalizedPageSize()
+        };
+
+        var messages = await _messageRepository.GetByConversation(conversationId, normalizedPagination);
         
         return messages.Select(m => new MessageDto
         {
@@ -64,9 +71,10 @@ public class MessageService : IMessageService
         var conversation = await GetOrCreateConversation(senderId, messageDto.RecipientId);       
         var message = new Message
         {
+            Id = Guid.NewGuid(),
             ConversationId = conversation.Id,
             SenderId = senderId,
-            Text = messageDto.Text,
+            Text = messageDto.Text.Trim(),
         };
 
         conversation.LastMessageAt = DateTimeOffset.UtcNow;

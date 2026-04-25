@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+п»їusing Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Thinka.Domain.Dto.Ideas;
 using Thinka.Domain.Enums;
@@ -7,7 +7,7 @@ using Thinka.Domain.Interfaces.Services;
 namespace Thinka.API.Controllers;
 
 /// <summary>
-///     Контроллер для работы с идеями.
+///     РљРѕРЅС‚СЂРѕР»Р»РµСЂ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ РёРґРµСЏРјРё.
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
@@ -35,9 +35,9 @@ public class IdeasController : ControllerBase
     }
 
     /// <summary>
-    ///     Создать свою идею.
+    ///     РЎРѕР·РґР°С‚СЊ СЃРІРѕСЋ РёРґРµСЋ.
     /// </summary>
-    /// <param name="createIdeaDto">Дто создания идеи.</param>
+    /// <param name="createIdeaDto">Р”С‚Рѕ СЃРѕР·РґР°РЅРёСЏ РёРґРµРё.</param>
     /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> CreateIdea([FromBody] CreateIdeaDto createIdeaDto)
@@ -47,41 +47,41 @@ public class IdeasController : ControllerBase
     }
     
     /// <summary>
-    ///     Поставить или убрать лайк для идеи.
+    ///     РџРѕСЃС‚Р°РІРёС‚СЊ РёР»Рё СѓР±СЂР°С‚СЊ Р»Р°Р№Рє РґР»СЏ РёРґРµРё.
     /// </summary>
     /// <remarks>
-    ///     Если лайк уже был поставлен, то повторный запрос его уберет.
+    ///     Р•СЃР»Рё Р»Р°Р№Рє СѓР¶Рµ Р±С‹Р» РїРѕСЃС‚Р°РІР»РµРЅ, С‚Рѕ РїРѕРІС‚РѕСЂРЅС‹Р№ Р·Р°РїСЂРѕСЃ РµРіРѕ СѓР±РµСЂРµС‚.
     /// </remarks>
-    /// <param name="id">Идентификатор идеи.</param>
+    /// <param name="id">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РёРґРµРё.</param>
     /// <returns></returns>
     [HttpPost("{id:guid}/like")]
     public async Task<IActionResult> ToggleLike(Guid id)
     {
         await _likeService.ToggleLikeAsync(id);
-        return Ok();
+        return NoContent();
     }
 
     /// <summary>
-    ///     Добавить идею в сохраненные.
+    ///     Р”РѕР±Р°РІРёС‚СЊ РёРґРµСЋ РІ СЃРѕС…СЂР°РЅРµРЅРЅС‹Рµ.
     /// </summary>
     /// <remarks>
-    ///     Если идея уже была сохранена, то повторный запрос ее удалит из сохраненных.
+    ///     Р•СЃР»Рё РёРґРµСЏ СѓР¶Рµ Р±С‹Р»Р° СЃРѕС…СЂР°РЅРµРЅР°, С‚Рѕ РїРѕРІС‚РѕСЂРЅС‹Р№ Р·Р°РїСЂРѕСЃ РµРµ СѓРґР°Р»РёС‚ РёР· СЃРѕС…СЂР°РЅРµРЅРЅС‹С….
     /// </remarks>
-    /// <param name="id">Идентификатор идеи.</param>
+    /// <param name="id">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РёРґРµРё.</param>
     /// <returns></returns>
     [HttpPost("{id:guid}/save")]
     public async Task<IActionResult> ToggleSave(Guid id)
     {
         await _saveService.ToggleSaveAsync(id);
-        return Ok();
+        return NoContent();
     }
     
     /// <summary>
-    ///     Получить свои идеи из сохраненных.
+    ///     РџРѕР»СѓС‡РёС‚СЊ СЃРІРѕРё РёРґРµРё РёР· СЃРѕС…СЂР°РЅРµРЅРЅС‹С….
     /// </summary>
-    /// <param name="pageNumber">Номер страницы.</param>
-    /// <param name="pageSize">Количество элементов на страницу.</param>
-    /// <returns>Список сохраненных идей.</returns>
+    /// <param name="pageNumber">РќРѕРјРµСЂ СЃС‚СЂР°РЅРёС†С‹.</param>
+    /// <param name="pageSize">РљРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РЅР° СЃС‚СЂР°РЅРёС†Сѓ.</param>
+    /// <returns>РЎРїРёСЃРѕРє СЃРѕС…СЂР°РЅРµРЅРЅС‹С… РёРґРµР№.</returns>
     [HttpGet("saves")]
     public async Task<IActionResult> GetSavedIdeas([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
@@ -90,11 +90,11 @@ public class IdeasController : ControllerBase
     }
 
     /// <summary>
-    ///     Получить свои идеи.
+    ///     РџРѕР»СѓС‡РёС‚СЊ СЃРІРѕРё РёРґРµРё.
     /// </summary>
-    /// <param name="pageNumber">Номер страницы.</param>
-    /// <param name="pageSize">Количество элементов на страницу.</param>
-    /// <returns>Список своих идей.</returns>
+    /// <param name="pageNumber">РќРѕРјРµСЂ СЃС‚СЂР°РЅРёС†С‹.</param>
+    /// <param name="pageSize">РљРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РЅР° СЃС‚СЂР°РЅРёС†Сѓ.</param>
+    /// <returns>РЎРїРёСЃРѕРє СЃРІРѕРёС… РёРґРµР№.</returns>
     [HttpGet]
     public async Task<IActionResult> GetUserIdeas([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
@@ -103,12 +103,12 @@ public class IdeasController : ControllerBase
     }
 
     /// <summary>
-    ///     Получить идеи определенного пользователя.
+    ///     РџРѕР»СѓС‡РёС‚СЊ РёРґРµРё РѕРїСЂРµРґРµР»РµРЅРЅРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ.
     /// </summary>
-    /// <param name="userId">Идентификатор пользователя.</param>
-    /// <param name="pageNumber">Номер страницы.</param>
-    /// <param name="pageSize">Количество элементов на страницу.</param>
-    /// <returns>Список идей определенного пользователя.</returns>
+    /// <param name="userId">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ.</param>
+    /// <param name="pageNumber">РќРѕРјРµСЂ СЃС‚СЂР°РЅРёС†С‹.</param>
+    /// <param name="pageSize">РљРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РЅР° СЃС‚СЂР°РЅРёС†Сѓ.</param>
+    /// <returns>РЎРїРёСЃРѕРє РёРґРµР№ РѕРїСЂРµРґРµР»РµРЅРЅРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ.</returns>
     [HttpGet("user/{userId:guid}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetUserIdeas(Guid userId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
@@ -118,10 +118,10 @@ public class IdeasController : ControllerBase
     }
 
     /// <summary>
-    ///     Получить идею по идентификатору.
+    ///     РџРѕР»СѓС‡РёС‚СЊ РёРґРµСЋ РїРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂСѓ.
     /// </summary>
-    /// <param name="id">Идентификатор идеи.</param>
-    /// <returns>Идея с указанным идентификатором.</returns>
+    /// <param name="id">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РёРґРµРё.</param>
+    /// <returns>РРґРµСЏ СЃ СѓРєР°Р·Р°РЅРЅС‹Рј РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂРѕРј.</returns>
     [HttpGet("{id:guid}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetIdea(Guid id)
@@ -135,12 +135,12 @@ public class IdeasController : ControllerBase
     }
     
     /// <summary>
-    ///     Получить комментарии к определенной идее.
+    ///     РџРѕР»СѓС‡РёС‚СЊ РєРѕРјРјРµРЅС‚Р°СЂРёРё Рє РѕРїСЂРµРґРµР»РµРЅРЅРѕР№ РёРґРµРµ.
     /// </summary>
-    /// <param name="ideaId">Идентификатор идеи.</param>
-    /// <param name="page">Номер страницы.</param>
-    /// <param name="pageSize">Количество элементов на страницу.</param>
-    /// <returns>Список комментариев для определенной идее.</returns>
+    /// <param name="ideaId">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РёРґРµРё.</param>
+    /// <param name="page">РќРѕРјРµСЂ СЃС‚СЂР°РЅРёС†С‹.</param>
+    /// <param name="pageSize">РљРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РЅР° СЃС‚СЂР°РЅРёС†Сѓ.</param>
+    /// <returns>РЎРїРёСЃРѕРє РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРЅРѕР№ РёРґРµРµ.</returns>
     [HttpGet("{ideaId:guid}/comments")]
     [AllowAnonymous]
     public async Task<IActionResult> GetComments(Guid ideaId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
@@ -150,10 +150,10 @@ public class IdeasController : ControllerBase
     }
 
     /// <summary>
-    ///     Обновить идею.
+    ///     РћР±РЅРѕРІРёС‚СЊ РёРґРµСЋ.
     /// </summary>
-    /// <param name="id">Идентификатор идеи.</param>
-    /// <param name="updateIdeaDto">Дто изменения идеи.</param>
+    /// <param name="id">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РёРґРµРё.</param>
+    /// <param name="updateIdeaDto">Р”С‚Рѕ РёР·РјРµРЅРµРЅРёСЏ РёРґРµРё.</param>
     /// <returns></returns>
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateIdea(Guid id, [FromBody] UpdateIdeaDto updateIdeaDto)
@@ -163,9 +163,9 @@ public class IdeasController : ControllerBase
     }
 
     /// <summary>
-    ///     Удалить идею.
+    ///     РЈРґР°Р»РёС‚СЊ РёРґРµСЋ.
     /// </summary>
-    /// <param name="id">Идентификатор удаляемой идеи.</param>
+    /// <param name="id">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СѓРґР°Р»СЏРµРјРѕР№ РёРґРµРё.</param>
     /// <returns></returns>
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteIdea(Guid id)
@@ -175,14 +175,14 @@ public class IdeasController : ControllerBase
     }
 
     /// <summary>
-    ///     Поиск идей по запросу.
+    ///     РџРѕРёСЃРє РёРґРµР№ РїРѕ Р·Р°РїСЂРѕСЃСѓ.
     /// </summary>
-    /// <param name="query">Текстовый запрос для поиска.</param>
-    /// <param name="category">Категория идей, среди которых искать.</param>
-    /// <param name="authorId">Идентификатор пользователя, среди идей которого искать.</param>
-    /// <param name="page">Номер страницы.</param>
-    /// <param name="pageSize">Количество элементов на страницу.</param>
-    /// <returns>Список идей, соответствующих поиску.</returns>
+    /// <param name="query">РўРµРєСЃС‚РѕРІС‹Р№ Р·Р°РїСЂРѕСЃ РґР»СЏ РїРѕРёСЃРєР°.</param>
+    /// <param name="category">РљР°С‚РµРіРѕСЂРёСЏ РёРґРµР№, СЃСЂРµРґРё РєРѕС‚РѕСЂС‹С… РёСЃРєР°С‚СЊ.</param>
+    /// <param name="authorId">РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ, СЃСЂРµРґРё РёРґРµР№ РєРѕС‚РѕСЂРѕРіРѕ РёСЃРєР°С‚СЊ.</param>
+    /// <param name="page">РќРѕРјРµСЂ СЃС‚СЂР°РЅРёС†С‹.</param>
+    /// <param name="pageSize">РљРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РЅР° СЃС‚СЂР°РЅРёС†Сѓ.</param>
+    /// <returns>РЎРїРёСЃРѕРє РёРґРµР№, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёС… РїРѕРёСЃРєСѓ.</returns>
     [HttpGet("search")]
     public async Task<IActionResult> SearchIdeas(
     [FromQuery] string query,
@@ -203,3 +203,4 @@ public class IdeasController : ControllerBase
         return Ok(result);
     }
 }
+

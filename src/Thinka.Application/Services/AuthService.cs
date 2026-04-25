@@ -29,15 +29,24 @@ public class AuthService : IAuthService
 
     public async Task RegisterAsync(UserRegisterDto userRegisterDto)
     {
-        if (await _userRepository.IsEmailTakenAsync(userRegisterDto.Email))
+        var normalizedEmail = NormalizeEmail(userRegisterDto.Email);
+        var userName = userRegisterDto.UserName.Trim();
+
+        if (string.IsNullOrWhiteSpace(userName))
+        {
+            throw new ArgumentException("Username cannot be empty.");
+        }
+
+        if (await _userRepository.IsEmailTakenAsync(normalizedEmail))
         {
             throw new ConflictException("Email is already taken.");
         }
 
         var user = new User
         {
-            Email = userRegisterDto.Email,
-            UserName = userRegisterDto.UserName,
+            Id = Guid.NewGuid(),
+            Email = normalizedEmail,
+            UserName = userName,
         };
 
         (user.PasswordHash, user.PasswordSalt) = CreatePasswordHash(userRegisterDto.Password);
@@ -51,7 +60,8 @@ public class AuthService : IAuthService
     
     public async Task<TokenDto> LoginAsync(UserLoginDto userLoginDto)
     {
-        var user = await _userRepository.GetByEmailAsync(userLoginDto.Email);
+        var normalizedEmail = NormalizeEmail(userLoginDto.Email);
+        var user = await _userRepository.GetByEmailAsync(normalizedEmail);
 
         if (user == null || !VerifyPasswordHash(userLoginDto.Password, user.PasswordHash, user.PasswordSalt))
         {
@@ -75,8 +85,12 @@ public class AuthService : IAuthService
     {
         var principal = _tokenService.GetPrincipalFromExpiredToken(tokenDto.AccessToken);
         var userEmail = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+        if (string.IsNullOrWhiteSpace(userEmail))
+        {
+            throw new SecurityTokenException("Invalid access token.");
+        }
 
-        var user = await _userRepository.GetByEmailAsync(userEmail!);
+        var user = await _userRepository.GetByEmailAsync(NormalizeEmail(userEmail));
 
         if (user is null || user.RefreshToken != tokenDto.RefreshToken || user.TokenExpires <= DateTime.UtcNow)
         {
@@ -106,8 +120,18 @@ public class AuthService : IAuthService
 
     private bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
     {
-        var salt = Encoding.UTF8.GetString(storedSalt);
         var hash = Encoding.UTF8.GetString(storedHash);
         return BC.Verify(password, hash);
+    }
+
+    private static string NormalizeEmail(string email)
+    {
+        var normalizedEmail = email.Trim().ToLowerInvariant();
+        if (string.IsNullOrWhiteSpace(normalizedEmail))
+        {
+            throw new ArgumentException("Email cannot be empty.");
+        }
+
+        return normalizedEmail;
     }
 }

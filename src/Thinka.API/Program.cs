@@ -1,4 +1,4 @@
-using Serilog;
+﻿using Serilog;
 using Thinka.API.DependencyInjection;
 using Thinka.API.Hubs;
 using Thinka.API.Middlewares;
@@ -10,10 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, configuration) => 
     configuration.ReadFrom.Configuration(context.Configuration));
 
-builder.Services.AddControllers();
-
-builder.Services.AddHttpContextAccessor();
-
+builder.Services.AddApiLayer();
 builder.Services.AddDataAccessLayer(builder.Configuration);
 builder.Services.AddApplication();
 builder.Services.AddOptions(builder.Configuration);
@@ -29,6 +26,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSerilogRequestLogging();
+
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
@@ -37,6 +36,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<ChatHub>("/chathub");
+app.MapHub<ChatHub>("/chathub").RequireAuthorization();
 
 app.Run();
