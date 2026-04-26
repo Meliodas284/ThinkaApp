@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Thinka.Domain.Dto;
 using Thinka.Domain.Dto.User;
@@ -46,10 +45,10 @@ public class AuthService : IAuthService
         {
             Id = Guid.NewGuid(),
             Email = normalizedEmail,
-            UserName = userName,
+            UserName = userName
         };
 
-        (user.PasswordHash, user.PasswordSalt) = CreatePasswordHash(userRegisterDto.Password);
+        user.PasswordHash = BC.HashPassword(userRegisterDto.Password);
         
         var refreshToken = _tokenService.CreateRefreshToken();
         _tokenService.UpdateUserRefreshToken(user, refreshToken);
@@ -63,7 +62,7 @@ public class AuthService : IAuthService
         var normalizedEmail = NormalizeEmail(userLoginDto.Email);
         var user = await _userRepository.GetByEmailAsync(normalizedEmail);
 
-        if (user == null || !VerifyPasswordHash(userLoginDto.Password, user.PasswordHash, user.PasswordSalt))
+        if (user == null || !BC.Verify(userLoginDto.Password, user.PasswordHash))
         {
             throw new UnauthorizedException("Invalid credentials.");
         }
@@ -111,22 +110,9 @@ public class AuthService : IAuthService
         };
     }
 
-    private (byte[] passwordHash, byte[] passwordSalt) CreatePasswordHash(string password)
-    {
-        var salt = BC.GenerateSalt(12);
-        var hash = BC.HashPassword(password, salt);
-        return (Encoding.UTF8.GetBytes(hash), Encoding.UTF8.GetBytes(salt));
-    }
-
-    private bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
-    {
-        var hash = Encoding.UTF8.GetString(storedHash);
-        return BC.Verify(password, hash);
-    }
-
     private static string NormalizeEmail(string email)
     {
-        var normalizedEmail = email.Trim().ToLowerInvariant();
+        var normalizedEmail = email.Trim();
         if (string.IsNullOrWhiteSpace(normalizedEmail))
         {
             throw new ArgumentException("Email cannot be empty.");

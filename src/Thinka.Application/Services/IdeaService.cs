@@ -30,8 +30,10 @@ public class IdeaService : IIdeaService
     public async Task<FullIdeaDto> CreateIdeaAsync(CreateIdeaDto createIdeaDto)
     {
         var authorId = _currentUserService.UserId;
+
         var author = await _userRepository.GetByIdAsync(authorId)
             ?? throw new NotFoundException("Author not found.");
+
         var idea = new Idea
         {
             Id = Guid.NewGuid(),
