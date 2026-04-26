@@ -2,6 +2,7 @@ using Thinka.Application.Common;
 using Thinka.Domain.Dto;
 using Thinka.Domain.Dto.Ideas;
 using Thinka.Domain.Entities;
+using Thinka.Domain.Enums;
 using Thinka.Domain.Exceptions;
 using Thinka.Domain.Interfaces.Repositories;
 using Thinka.Domain.Interfaces.Services;
@@ -34,13 +35,16 @@ public class IdeaService : IIdeaService
         var author = await _userRepository.GetByIdAsync(authorId)
             ?? throw new NotFoundException("Author not found.");
 
+        if (!Enum.TryParse<Category>(createIdeaDto.Category, true, out var category))
+            throw new ArgumentException("Invalid category");
+
         var idea = new Idea
         {
             Id = Guid.NewGuid(),
             Title = createIdeaDto.Title.Trim(),
             ShortDescription = createIdeaDto.ShortDescription.Trim(),
             FullDescription = createIdeaDto.FullDescription.Trim(),
-            Category = createIdeaDto.Category,
+            Category = category,
             AuthorId = authorId
         };
 

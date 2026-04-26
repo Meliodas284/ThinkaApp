@@ -17,5 +17,5 @@ public class CreateIdeaDto
     public string FullDescription { get; set; } = null!;
 
     [Required]
-    public Category Category { get; set; }
+    public string Category { get; set; } = null!;
 }
