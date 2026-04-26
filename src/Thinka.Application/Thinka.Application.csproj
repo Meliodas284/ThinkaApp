@@ -1,8 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\Thinka.Domain\Thinka.Domain.csproj" />
-    <ProjectReference Include="..\Thinka.DAL\Thinka.DAL.csproj" />
   </ItemGroup>
 
   <ItemGroup>

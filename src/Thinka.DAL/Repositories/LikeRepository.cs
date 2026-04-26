@@ -13,6 +13,12 @@ public class LikeRepository : ILikeRepository
         _context = context;
     }
 
+    public async Task<Like?> GetByIdeaAndUserAsync(Guid ideaId, Guid userId)
+    {
+        return await _context.Likes
+            .FirstOrDefaultAsync(l => l.IdeaId == ideaId && l.UserId == userId);
+    }
+
     public async Task AddAsync(Like like)
     {
         await _context.Likes.AddAsync(like);

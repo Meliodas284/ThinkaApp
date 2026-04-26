@@ -1,3 +1,5 @@
+using Thinka.Application.Common;
+using Thinka.Domain.Dto;
 using Thinka.Domain.Dto.Ideas;
 using Thinka.Domain.Entities;
 using Thinka.Domain.Exceptions;
@@ -27,8 +29,7 @@ public class SaveService : ISaveService
 
     public async Task ToggleSaveAsync(Guid ideaId)
     {
-        var idea = await _ideaRepository.GetByIdAsync(ideaId);
-        if (idea is null)
+        if (!await _ideaRepository.ExistsAsync(ideaId))
         {
             throw new NotFoundException("Idea is not found");
         }
@@ -42,7 +43,6 @@ public class SaveService : ISaveService
             {
                 IdeaId = ideaId,
                 UserId = userId,
-                CreatedAt = DateTime.UtcNow
             };
             await _saveRepository.AddAsync(save);
         }
@@ -57,7 +57,12 @@ public class SaveService : ISaveService
     public async Task<List<IdeaDto>> GetSavedIdeasAsync(int pageNumber, int pageSize)
     {
         var userId = _currentUserService.UserId;
-        var ideas = await _saveRepository.GetSavedIdeasAsync(userId, pageNumber, pageSize);
+        var pagination = new PaginationQuery
+        {
+            Page = pageNumber,
+            PageSize = pageSize
+        };
+        var ideas = await _saveRepository.GetSavedIdeasAsync(userId, pagination.GetNormalizedPage(), pagination.GetNormalizedPageSize());
         
         return ideas.Select(idea => new IdeaDto
         {

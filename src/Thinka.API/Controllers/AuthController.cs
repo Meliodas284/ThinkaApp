@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Thinka.Domain.Dto;
 using Thinka.Domain.Dto.User;
 using Thinka.Domain.Interfaces.Services;
@@ -17,23 +17,24 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(UserRegisterDto userRegisterDto)
+    public async Task<IActionResult> Register([FromBody] UserRegisterDto userRegisterDto)
     {
         await _authService.RegisterAsync(userRegisterDto);
-        return Ok();
+        return NoContent();
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(UserLoginDto userLoginDto)
+    public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto)
     {
         var tokenDto = await _authService.LoginAsync(userLoginDto);
         return Ok(tokenDto);
     }
 
     [HttpPost("refresh-token")]
-    public async Task<IActionResult> RefreshToken(TokenDto tokenDto)
+    public async Task<IActionResult> RefreshToken([FromBody] TokenDto tokenDto)
     {
         var resultTokenDto = await _authService.RefreshTokenAsync(tokenDto);
         return Ok(resultTokenDto);
     }
 }
+

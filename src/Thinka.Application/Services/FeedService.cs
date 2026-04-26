@@ -1,3 +1,4 @@
+using Thinka.Application.Common;
 using Thinka.Domain.Dto;
 using Thinka.Domain.Dto.Ideas;
 using Thinka.Domain.Interfaces.Repositories;
@@ -19,7 +20,7 @@ public class FeedService : IFeedService
     public async Task<List<IdeaDto>> GetFeedAsync(PaginationQuery query)
     {
         var currentUserId = _currentUserService.UserId;
-        var ideas = await _ideaRepository.GetFeedAsync(currentUserId, query.Page, query.PageSize);
+        var ideas = await _ideaRepository.GetFeedAsync(currentUserId, query.GetNormalizedPage(), query.GetNormalizedPageSize());
 
         return ideas.Select(idea => new IdeaDto
         {

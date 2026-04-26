@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Thinka.Domain.Dto.IdeasComments;
 using Thinka.Domain.Interfaces.Services;
@@ -21,7 +21,7 @@ public class CommentsController : ControllerBase
     public async Task<IActionResult> CreateComment([FromBody] CreateCommentDto createCommentDto)
     {
         await _commentService.CreateComment(createCommentDto);
-        return Ok();
+        return NoContent();
     }
 
     [HttpPut("{id:guid}")]

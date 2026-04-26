@@ -12,6 +12,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasIndex(u => u.Email).IsUnique();
         builder.Property(u => u.UserName).IsRequired();
         builder.Property(u => u.PasswordHash).IsRequired();
-        builder.Property(u => u.PasswordSalt).IsRequired();
     }
 }

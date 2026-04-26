@@ -1,19 +1,33 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using System.Security.Claims;
-using Thinka.Domain.Exceptions;
+using Thinka.Domain.Interfaces.Repositories;
 
 namespace Thinka.API.Hubs;
 
 [Authorize]
 public class ChatHub : Hub
 {
+    private readonly IConversationRepository _conversationRepository;
+
+    public ChatHub(IConversationRepository conversationRepository)
+    {
+        _conversationRepository = conversationRepository;
+    }
+
     public async Task JoinConversation(Guid conversationId)
     {
         var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        if (string.IsNullOrEmpty(userId))
-            throw new UnauthorizedException("User is not authorized");
+        if (!Guid.TryParse(userId, out var parsedUserId))
+            throw new HubException("User is not authorized.");
+
+        var conversation = await _conversationRepository.GetById(conversationId);
+        if (conversation is null)
+            throw new HubException("Conversation not found.");
+
+        if (!conversation.HasParticipant(parsedUserId))
+            throw new HubException("You do not have access to this conversation.");
 
         await Groups.AddToGroupAsync(
             Context.ConnectionId,

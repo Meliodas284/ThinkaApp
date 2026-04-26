@@ -1,5 +1,8 @@
+using Thinka.Application.Common;
+using Thinka.Domain.Dto;
 using Thinka.Domain.Dto.Ideas;
 using Thinka.Domain.Entities;
+using Thinka.Domain.Enums;
 using Thinka.Domain.Exceptions;
 using Thinka.Domain.Interfaces.Repositories;
 using Thinka.Domain.Interfaces.Services;
@@ -9,15 +12,18 @@ namespace Thinka.Application.Services;
 public class IdeaService : IIdeaService
 {
     private readonly IIdeaRepository _ideaRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
 
     public IdeaService(
         IIdeaRepository ideaRepository, 
+        IUserRepository userRepository,
         ICurrentUserService currentUserService, 
         IUnitOfWork unitOfWork)
     {
         _ideaRepository = ideaRepository;
+        _userRepository = userRepository;
         _currentUserService = currentUserService;
         _unitOfWork = unitOfWork;
     }
@@ -25,13 +31,20 @@ public class IdeaService : IIdeaService
     public async Task<FullIdeaDto> CreateIdeaAsync(CreateIdeaDto createIdeaDto)
     {
         var authorId = _currentUserService.UserId;
+
+        var author = await _userRepository.GetByIdAsync(authorId)
+            ?? throw new NotFoundException("Author not found.");
+
+        if (!Enum.TryParse<Category>(createIdeaDto.Category, true, out var category))
+            throw new ArgumentException("Invalid category");
+
         var idea = new Idea
         {
             Id = Guid.NewGuid(),
-            Title = createIdeaDto.Title,
-            ShortDescription = createIdeaDto.ShortDescription,
-            FullDescription = createIdeaDto.FullDescription,
-            Category = createIdeaDto.Category,
+            Title = createIdeaDto.Title.Trim(),
+            ShortDescription = createIdeaDto.ShortDescription.Trim(),
+            FullDescription = createIdeaDto.FullDescription.Trim(),
+            Category = category,
             AuthorId = authorId
         };
 
@@ -48,7 +61,7 @@ public class IdeaService : IIdeaService
             Author = new AuthorDto
             {
                 Id = authorId,
-                Username = string.Empty
+                Username = author.UserName
             }
         };
     }
@@ -56,7 +69,12 @@ public class IdeaService : IIdeaService
     public async Task<List<IdeaDto>> GetUserIdeasAsync(int pageNumber, int pageSize, Guid? userId = null)
     {
         var authorId = userId ?? _currentUserService.UserId;
-        var ideas = await _ideaRepository.GetByAuthorIdAsync(authorId, pageNumber, pageSize);
+        var pagination = new PaginationQuery
+        {
+            Page = pageNumber,
+            PageSize = pageSize
+        };
+        var ideas = await _ideaRepository.GetByAuthorIdAsync(authorId, pagination.GetNormalizedPage(), pagination.GetNormalizedPageSize());
         return ideas.Select(idea => new IdeaDto
         {
             Id = idea.Id,
@@ -87,9 +105,9 @@ public class IdeaService : IIdeaService
             throw new ForbiddenException("User is not authorized to update this idea.");
         }
 
-        idea.Title = updateIdeaDto.Title;
-        idea.ShortDescription = updateIdeaDto.ShortDescription;
-        idea.FullDescription = updateIdeaDto.FullDescription;
+        idea.Title = updateIdeaDto.Title.Trim();
+        idea.ShortDescription = updateIdeaDto.ShortDescription.Trim();
+        idea.FullDescription = updateIdeaDto.FullDescription.Trim();
         idea.Category = updateIdeaDto.Category;
 
         await _ideaRepository.UpdateAsync(idea);
